@@ -2,37 +2,128 @@
     <div class="dlabnav">
         <div class="dlabnav-scroll">
             <ul class="metismenu" id="menu">
-                <li class="nav-label first">Main Menu</li>
+                <li class="nav-label first">القائمة الرئيسيه</li>
 
                 <li><a class="ai-icon" href="{{ url('/' . $page='dashboard') }}" aria-expanded="false">
                         <i class="la la-home"></i>
                         <span class="nav-text">لوحة التحكم</span>
                     </a>
                 </li>
-
                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                        <i class="la la-graduation-cap"></i>
-                        <span class="nav-text">Courses</span>
+                        <i class="las la-file-invoice"></i>
+                        <span class="nav-text">اوردرات اونلاين</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="all-courses.html">All Courses</a></li>
-                        <li><a href="add-courses.html">Add Courses</a></li>
-                        <li><a href="edit-courses.html">Edit Courses</a></li>
-                        <li><a href="about-courses.html">About Courses</a></li>
+                        <li><a href="about-courses.html">قائمة جميع الاوردرات</a></li>
+                        <li><a href="all-courses.html">أضافة اوردر جديد</a></li>
+                        <li><a href="add-courses.html">اوردرات تحت التجهيز</a></li>
+                        <li><a href="edit-courses.html">اوردرات تحت التسليم</a></li>
+                        <li><a href="edit-courses.html">اوردرات مؤجلة</a></li>
+                        <li><a href="edit-courses.html">اوردرات مرتجع</a></li>
+
+                    </ul>
+                </li>
+                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="las la-file-invoice-dollar"></i>
+                        <span class="nav-text">حساب الموردين</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="about-courses.html">قائمة الفواتير</a></li>
+                        <li><a href="all-courses.html">أضافة فاتورة لمورد</a></li>
+                        <li><a href="add-courses.html">أضافة سداد لمورد</a></li>
+                        <li><a href="edit-courses.html">كشف حساب مورد</a></li>
+
+                    </ul>
+                </li>
+                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="las la-donate"></i>
+                        <span class="nav-text">حساب الخزينة</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="about-courses.html">كشف حساب الخزينة</a></li>
+                        <li><a href="all-courses.html">أضافة مصروف</a></li>
+
                     </ul>
                 </li>
 
-
                 <li class="nav-label">إعدادات النظام</li>
                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                        <i class="la la-graduation-cap"></i>
-                        <span class="nav-text">Courses</span>
+                        <i class="la la-users"></i>
+                        <span class="nav-text">المستخدمين</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="all-courses.html">All Courses</a></li>
-                        <li><a href="add-courses.html">Add Courses</a></li>
-                        <li><a href="edit-courses.html">Edit Courses</a></li>
-                        <li><a href="about-courses.html">About Courses</a></li>
+                        <li><a href="{{url('/'.$page='users')}}">قائمة المستخدمين</a></li>
+                        <li><a href="{{url('/'.$page='users/create')}}">أضافة مستخدم</a></li>
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">صلاحيات المستخدمين</a>
+                            <ul aria-expanded="false">
+                                <li><a href="{{url('/'.$page='roles')}}">قائمة الصلاحيات</a></li>
+                                <li><a href="{{url('/'.$page='roles/create')}}">أضافة صلاحية</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="la la-tags"></i>
+                        <span class="nav-text">الاقسام & المنتجات</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">الاقسام</a>
+                            <ul aria-expanded="false">
+                                <li><a href="./page-error-400.html">قائمة الاقسام</a></li>
+                                <li><a href="./page-error-403.html">أضافة قسم</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">المنتجات</a>
+                            <ul aria-expanded="false">
+                                <li><a href="./page-error-400.html">قائمة المنتجات</a></li>
+                                <li><a href="./page-error-403.html">أضافة منتج</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="las la-truck"></i>
+                        <span class="nav-text">الشحن</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="all-courses.html">قائمة مناديب الشحن</a></li>
+                        <li><a href="add-courses.html">أضافة مندوب</a></li>
+                    </ul>
+                </li>
+                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="la la-user-times"></i>
+                        <span class="nav-text">الموردين</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="all-courses.html">قائمة الموردين</a></li>
+                        <li><a href="add-courses.html">أضافة مورد</a></li>
+                    </ul>
+                </li>
+                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="la la-user"></i>
+                        <span class="nav-text">العملاء</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="all-courses.html">قائمة العملاء</a></li>
+                        <li><a href="add-courses.html">أضافة عميل</a></li>
+                    </ul>
+                </li>
+                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="las la-campground"></i>
+                        <span class="nav-text">المخازن</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="all-courses.html">قائمة المخازن</a></li>
+                        <li><a href="add-courses.html">أضافة مخزن</a></li>
+                    </ul>
+                </li>
+                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="las la-landmark"></i>
+                        <span class="nav-text">الخزينة</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="all-courses.html">قائمة الخزائن</a></li>
+                        <li><a href="add-courses.html">أضافة خزينة</a></li>
                     </ul>
                 </li>
                 <li class="nav-label">أضافات أخري</li>

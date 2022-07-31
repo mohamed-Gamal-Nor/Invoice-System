@@ -55,7 +55,13 @@
     @include('layouts.main-sidebar')
     <!--**********************************Sidebar end ***********************************-->
     <!--**********************************Content body start***********************************-->
-    @yield('content')
+    <div class="content-body">
+        <div class="container-fluid">
+            <!-- row -->
+            @yield('content')
+        </div>
+    </div>
+
 
     <!--**********************************Content body end***********************************-->
 

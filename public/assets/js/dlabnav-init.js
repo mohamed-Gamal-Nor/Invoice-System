@@ -2,7 +2,7 @@
 
 	var direction =  getUrlParams('dir');
 	if(direction != 'rtl')
-	{direction = 'ltr'; }
+	{direction = 'rtl'; }
 
 	var dlabSettingsOptions = {
 		typography: "roboto",

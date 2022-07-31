@@ -15,4 +15,29 @@
     <!-- Svganimation scripts -->
     <script type="text/javascript" src="{{ URL::asset('assets/vendor/svganimation/vivus.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('assets/vendor/svganimation/svg.animation.js') }}"></script>
+    <!-- Toastr -->
+    <script src="{{URL::asset('assets/vendor/toastr/js/toastr.min.js')}}"></script>
+    <!-- All init script -->
+    <script src="{{URL::asset('assets/js/plugins-init/toastr-init.js')}}"></script>
+    <script>
+        function toasterOptions() {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "100",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "show",
+                "hideMethod": "hide"
+            };
+        };
+    </script>
     @yield('script')
