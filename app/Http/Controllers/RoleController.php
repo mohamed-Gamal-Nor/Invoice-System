@@ -18,9 +18,8 @@ class RoleController extends Controller
     */
     public function index(Request $request)
     {
-        $roles = Role::orderBy('id','ASC')->paginate(5);
-        return view('roles.index',compact('roles'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        $roles = Role::orderBy('id','ASC')->get();
+        return view('roles.index',compact('roles'));
     }
 
     public function create()
@@ -34,11 +33,21 @@ class RoleController extends Controller
         $this->validate($request, [
             'name' => 'required|unique:roles,name',
             'permission' => 'required',
+        ],[
+            'name.required' => 'يجب ادخال اسم الصلاحية',
+            'name.unique' => 'هذا الاسم تم استخدامه من قبل',
+            'permission.required' => 'يجب اختيار صلاحية',
         ]);
-        $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions($request->input('permission'));
-        return redirect()->route('roles.index')
-            ->with('success','Role created successfully');
+        try {
+            $role = Role::create(['name' => $request->input('name')]);
+            $role->syncPermissions($request->input('permission'));
+            toastr()->success('تم حفظ بيانات الصلاحية بنجاح');
+            return redirect()->route('roles.index');
+        }catch (\Exception $e) {
+            toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
+            return redirect()->route('roles.index');
+        };
+
     }
 
     public function show($id)
@@ -65,19 +74,33 @@ class RoleController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'permission' => 'required',
+        ],[
+            'name.required' => 'يجب ادخال اسم الصلاحية',
+            'permission.required' => 'يجب اختيار صلاحية',
         ]);
-        $role = Role::find($id);
-        $role->name = $request->input('name');
-        $role->save();
-        $role->syncPermissions($request->input('permission'));
-        return redirect()->route('roles.index')
-            ->with('success','Role updated successfully');
+        try {
+            $role = Role::find($id);
+            $role->name = $request->input('name');
+            $role->save();
+            $role->syncPermissions($request->input('permission'));
+            toastr()->success('تم تعديل بيانات الصلاحية بنجاح');
+            return redirect()->route('roles.index');
+        }catch (\Exception $e) {
+            toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
+            return redirect()->route('roles.index');
+        };
+
     }
 
     public function destroy($id)
     {
-        DB::table("roles")->where('id',$id)->delete();
-        return redirect()->route('roles.index')
-            ->with('success','Role deleted successfully');
+        try {
+            DB::table("roles")->where('id',$id)->delete();
+            toastr()->success('تم حذف بيانات الصلاحية بنجاح');
+            return redirect()->route('roles.index');
+        }catch (\Exception $e) {
+            toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
+            return redirect()->route('roles.index');
+        };
     }
 }

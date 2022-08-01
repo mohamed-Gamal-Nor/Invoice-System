@@ -3,9 +3,9 @@
     قائمة الصلاحيات
 @endsection
 @section('css')
+
     <!-- STYLESHEETS -->
     <link rel="stylesheet" href="{{asset('assets/vendor/datatables/css/jquery.dataTables.min.css')}}">
-    <link rel="stylesheet" href="{{URL::asset('assets/vendor/toastr/css/toastr.min.css')}}">
 @endsection
 
 @section('content')
@@ -44,6 +44,7 @@
                             </tr>
                             </thead>
                             <tbody class="text-center">
+                            <?php $i =0;?>
                             @foreach($roles as $role)
                                 <tr>
                                     <td>{{ ++$i }}</td>
@@ -69,7 +70,11 @@
                             @endforeach
 
                             </tbody>
+
                         </table>
+                        <div class="col-12">
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -80,11 +85,4 @@
     <!-- Datatable -->
     <script type="text/javascript" src="{{ URL::asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('assets/js/plugins-init/datatables.init.js') }}"></script>
-
-    @if (session()->has('success'))
-        <script>
-            toasterOptions();
-            toastr.success("تم أضافة الصلاحية بنجاح");
-        </script>
-    @endif
 @endsection

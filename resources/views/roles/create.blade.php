@@ -26,6 +26,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">أضافة صلاحية جديدة</h4>
+
                 </div>
                 <div class="card-body">
                     <form action="{{ route('roles.store') }}" method="post">
@@ -62,7 +63,7 @@
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <button type="submit" class="btn btn-primary">حفظ</button>
-                                <button type="submit" class="btn btn-light">الغاء</button>
+                                <a class="btn btn-danger" href="{{url('/'.$page='roles')}}">الغاء</a>
                             </div>
                         </div>
                     </form>
