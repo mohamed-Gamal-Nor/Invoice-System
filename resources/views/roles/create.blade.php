@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    أضافة مستخدم
+    أضافة صلاحية
 @endsection
 @section('css')
 

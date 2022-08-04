@@ -3,17 +3,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
+    function __construct()
+    {
+
+        $this->middleware('permission:قائمة المستخدمين', ['only' => ['index']]);
+        $this->middleware('permission:أضافة مستخدمين', ['only' => ['create','store']]);
+        $this->middleware('permission:تعديل مستخدم', ['only' => ['edit','update']]);
+        $this->middleware('permission:حذف مستخدم', ['only' => ['destroy']]);
+    }
 
     public function index(Request $request)
     {
-        $data = User::orderBy('id','DESC')->paginate(5);
-        return view('users.index',compact('data'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        $users = User::orderBy('id','DESC')->get();
+        return view('users.index',compact('users'));
     }
 
     public function create()
@@ -25,17 +33,58 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
-            'roles' => 'required'
+            'name' => 'required|unique:users,name|string|min:3|max:100',
+            'email' => 'required|email|unique:users,email|regex:/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,8}$/',
+            'password' => 'required|same:confirm-password|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/',
+            "status" => "required|in:0,1",
+            'roles_name' => 'required',
+            "user_image" => "nullable|mimes:jpg,jpeg,png|max:5000"
+        ],[
+            'name.required' => 'يجب ادخال اسم المستخدم',
+            'name.unique' => 'اسم المستخدم هذا مستخدم من قبل',
+            'name.string' => 'اسم المستخدم غير صحيح',
+            'name.min' => 'يجب اسم المستخدم لايقل عن ثلاث حروف',
+            'name.max' => 'يجب اسم المستخدم لايزيد عن مائة حرف',
+            'email.required' => 'يجب ادخال البريد الالكتروني',
+            'email.email' => 'يجب ان يكون بريدا اليكترونيا',
+            'email.unique' => ' هذا البريد الاليكتروني مستخدم بالفعل',
+            'email.regex' => 'هذا البريداليكتروني غير صحيح',
+            'password.required' => 'يجب أدخال كلمة مرور',
+            'password.same' => 'كلمة المرور غير مطابقة',
+            'password.regex' => 'يجب أن تحتوي كلمة المرور علي حروف كبيرةوصغير وارقام ورموز',
+            'status.required' => 'يجب اختيار الحالة ',
+            'status.in' => 'الحالة التي تم اختيارها غير صحيحة',
+            'roles_name.required' => 'يجب اختيار صلاحية ',
+            'user_image.mimes' => "يجب ان تكون الصورة بصيغة JPG - PNG - JPEG",
+            'user_image.max' => "يجب ان لا يزيد حجم الصورة عن خمسة ميجا",
         ]);
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-        $user = User::create($input);
-        $user->assignRole($request->input('roles'));
-        return redirect()->route('users.index')
-            ->with('success','User created successfully');
+        try {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email  = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->roles_name = $request->roles_name;
+            $user->status = $request->status;
+            $user->save();
+            //$user->sendEmailVerificationNotification();
+            $user->assignRole($request->roles_name);
+            if (!empty($request->user_image)) {
+                $lastID = User::latest()->first()->id;
+                $imageName = time() . '.' . $request->user_image->getClientOriginalExtension();
+                $request->user_image->storeAs($lastID, $imageName, $disk = 'user_profile');
+                $userAfter = User::find($lastID);
+                $userAfter->update([
+                    'user_image' => $imageName
+                ]);
+
+            }
+            toastr()->success('تم حفظ بيانات المستخدم بنجاح');
+            return redirect()->route('users.index');
+        }catch (\Exception $e) {
+            toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
+            return redirect()->route('users.index');
+        };
+
     }
 
     public function show($id)
@@ -55,29 +104,73 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required'
+            'name' => 'required|unique:users,name,'.$request->id.'|string|min:3|max:100',
+            'email' => 'required|email|unique:users,email,'.$request->id.'|regex:/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,8}$/',
+            'password' => 'nullable|same:confirm-password|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/',
+            "status" => "required|in:0,1",
+            'roles_name' => 'required',
+            "user_image" => "nullable|mimes:jpg,jpeg,png|max:5000"
+        ],[
+            'name.required' => 'يجب ادخال اسم المستخدم',
+            'name.unique' => 'اسم المستخدم هذا مستخدم من قبل',
+            'name.string' => 'اسم المستخدم غير صحيح',
+            'name.min' => 'يجب اسم المستخدم لايقل عن ثلاث حروف',
+            'name.max' => 'يجب اسم المستخدم لايزيد عن مائة حرف',
+            'email.required' => 'يجب ادخال البريد الالكتروني',
+            'email.email' => 'يجب ان يكون بريدا اليكترونيا',
+            'email.unique' => ' هذا البريد الاليكتروني مستخدم بالفعل',
+            'email.regex' => 'هذا البريداليكتروني غير صحيح',
+            'password.required' => 'يجب أدخال كلمة مرور',
+            'password.same' => 'كلمة المرور غير مطابقة',
+            'password.regex' => 'يجب أن تحتوي كلمة المرور علي حروف كبيرةوصغير وارقام ورموز',
+            'status.required' => 'يجب اختيار الحالة ',
+            'status.in' => 'الحالة التي تم اختيارها غير صحيحة',
+            'roles_name.required' => 'يجب اختيار صلاحية ',
+            'user_image.mimes' => "يجب ان تكون الصورة بصيغة JPG - PNG - JPEG",
+            'user_image.max' => "يجب ان لا يزيد حجم الصورة عن خمسة ميجا",
         ]);
-        $input = $request->all();
-        if(!empty($input['password'])){
-            $input['password'] = Hash::make($input['password']);
-        }else{
-            $input = array_except($input,array('password'));
-        }
-        $user = User::find($id);
-        $user->update($input);
-        DB::table('model_has_roles')->where('model_id',$id)->delete();
-        $user->assignRole($request->input('roles'));
-        return redirect()->route('users.index')
-            ->with('success','User updated successfully');
+        try {
+            $user = User::find($request->id);
+            $newPassword=null;
+            if(!empty($request->password)){
+                $newPassword = Hash::make($request->password);
+            }else{
+                $newPassword = $user->password;
+            }
+
+            if(!empty($request->user_image)){
+                $imageUpdate = time() . '.' . $request->user_image->getClientOriginalExtension();
+                $request->user_image->storeAs($request->id, $imageUpdate, $disk = 'user_profile');
+            }
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $newPassword,
+                'roles_name' => $request->roles_name,
+                'user_image' => $imageUpdate,
+                'status' => $request->status,
+            ]);
+            DB::table('model_has_roles')->where('model_id',$id)->delete();
+            $user->assignRole($request->roles_name);
+            toastr()->success('تم تحديث بيانات المستخدم بنجاح');
+            return redirect()->route('users.index');
+        }catch (\Exception $e) {
+            //toastr()->error($e->getMessage());
+            toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
+            return redirect()->route('users.index');
+        };
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        User::find($id)->delete();
-        return redirect()->route('users.index')
-            ->with('success','User deleted successfully');
+        try {
+            Storage::deleteDirectory('public/user_profile/'.$request->id);
+            $user = User::findOrFail($request->id)->delete();
+            toastr()->success('تم حذف بيانات المستخدم بنجاح');
+            return redirect()->route('users.index');
+        }catch (\Exception $e) {
+            toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
+            return redirect()->route('users.index');
+        };
     }
 }
