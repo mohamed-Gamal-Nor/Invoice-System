@@ -49,15 +49,24 @@
                 <li class="nav-label">إعدادات النظام</li>
                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
                         <i class="la la-users"></i>
-                        <span class="nav-text">المستخدمين</span>
+                        <span class="nav-text">المستخدمين & الصلاحيات</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="{{url('/'.$page='users')}}">قائمة المستخدمين</a></li>
-                        <li><a href="{{url('/'.$page='users/create')}}">أضافة مستخدم</a></li>
+                        @can('قائمة المستخدمين')
+                            <li><a href="{{url('/'.$page='users')}}">قائمة المستخدمين</a></li>
+                        @endcan
+                        @can('أضافة مستخدمين')
+                                <li><a href="{{url('/'.$page='users/create')}}">أضافة مستخدم</a></li>
+                        @endcan
+
                         <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">صلاحيات المستخدمين</a>
                             <ul aria-expanded="false">
-                                <li><a href="{{url('/'.$page='roles')}}">قائمة الصلاحيات</a></li>
-                                <li><a href="{{url('/'.$page='roles/create')}}">أضافة صلاحية</a></li>
+                                @can('قائمة الصلاحيات')
+                                    <li><a href="{{url('/'.$page='roles')}}">قائمة الصلاحيات</a></li>
+                                @endcan
+                                @can('أضافة صلاحية')
+                                    <li><a href="{{url('/'.$page='roles/create')}}">أضافة صلاحية</a></li>
+                                @endcan
                             </ul>
                         </li>
                     </ul>

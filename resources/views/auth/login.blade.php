@@ -16,7 +16,7 @@
     <link rel="icon" href="{{asset('assets/images/favicon.ico')}}" type="image/x-icon" />
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/favicon.png')}}" />
     <!-- PAGE TITLE HERE -->
-    <title>تسجيل الدخول</title>
+    <title>{{ __('Login') }}</title>
     <!-- MOBILE SPECIFIC -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- STYLESHEETS -->
@@ -36,15 +36,15 @@
                                 <form method="POST" class="form-valide" action="{{ route('login') }}">
                                     @csrf
                                     <div class="form-group">
-                                        <label><strong>البريد الاليكتروني</strong></label>
-                                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  autocomplete="email" autofocus>
+                                        <label><strong>{{ __('E-Mail Address') }}</strong></label>
+                                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}"  autocomplete="email" autofocus>
                                         @error('email')
                                         <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label><strong>كلمة المرور</strong></label>
-                                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password"  autocomplete="current-password">
+                                        <label><strong>{{ __('Password') }}</strong></label>
+                                        <input id="password" type="password" class="form-control" name="password"  autocomplete="current-password">
                                         @error('password')
                                         <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                         @enderror
@@ -53,15 +53,15 @@
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox ml-1">
                                                 <input type="checkbox" class="custom-control-input" id="basic_checkbox_1" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                                                <label class="custom-control-label" for="basic_checkbox_1">تذكرني</label>
+                                                <label class="custom-control-label" for="basic_checkbox_1">{{ __('Remember me') }}</label>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <a href="page-forgot-password.html">هل نسيت كلمة السر؟</a>
+                                            <a href="{{route('password.request')}}">{{ __('Forgot your password?') }}</a>
                                         </div>
                                     </div>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary btn-block">سجل دخولي</button>
+                                        <button type="submit" class="btn btn-primary btn-block">{{ __('Log in') }}</button>
                                     </div>
                                 </form>
                             </div>

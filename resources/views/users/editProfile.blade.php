@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    تعديل مستخدم
+    تعديل الملف الشخصي
 @endsection
 @section('css')
     <style>
@@ -69,14 +69,14 @@
     <div class="row page-titles mx-0">
         <div class="col-sm-6 p-md-0">
             <div class="welcome-text">
-                <h4>تعديل مستخدم</h4>
+                <h4>تعديل الملف الشخصي</h4>
             </div>
         </div>
         <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/' . $page='dashboard') }}">لوحة التحكم</a></li>
                 <li class="breadcrumb-item active"><a href="javascript:void(0);"> المستخدمين</a></li>
-                <li class="breadcrumb-item active"><a href="{{url('/'.$page='users/create')}}">تعديل مستخدم</a></li>
+                <li class="breadcrumb-item active"><a href="{{url('/'.$page='users/create')}}">تعديل الملف الشخصي</a></li>
             </ol>
         </div>
     </div>
@@ -84,19 +84,18 @@
         <div class="col-xl-12 col-xxl-12 col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title">تعديل مستخدم</h5>
+                    <h5 class="card-title">تعديل الملف الشخصي</h5>
                 </div>
-                @can('تعديل مستخدم')
                 <div class="card-body">
-                    <form action="{{ route('users.update', 'test') }}" enctype="multipart/form-data" method="post">
-                        {{ method_field('patch') }}
+                    <form action="{{ route('users.updateProfile', 'test') }}" enctype="multipart/form-data" method="post">
+                        {{ method_field('put') }}
                         @csrf
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <div class="avatar-upload">
                                         <div class="avatar-edit">
-                                            <input type='file' id="imageUpload" name="user_image" accept=".png, .jpg, .jpeg" @if($user->id !== Auth::user()->id) disabled @endif/>
+                                            <input type='file' id="imageUpload" name="user_image" accept=".png, .jpg, .jpeg" />
                                             <label for="imageUpload"></label>
                                         </div>
                                         <div class="avatar-preview">
@@ -119,7 +118,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">أسم المتخدم</label>
-                                    <input type="text" class="form-control" name="name" value="{{ $user->name}}" @if($user->id !== Auth::user()->id) disabled @endif>
+                                    <input type="text" class="form-control" name="name" value="{{ $user->name}}">
                                     <input type="hidden" class="form-control" name="id" value="{{ $user->id}}">
                                     @error('name')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
@@ -129,7 +128,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">البريد الاليكتروني</label>
-                                    <input type="email" class="form-control" name="email" value="{{ $user->email}}" @if($user->id !== Auth::user()->id) disabled @endif>
+                                    <input type="email" class="form-control" name="email" value="{{ $user->email}}">
                                     @error('email')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -138,7 +137,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">كلمة مرور</label>
-                                    <input type="password" class="form-control" name="password" @if($user->id !== Auth::user()->id) disabled @endif>
+                                    <input type="password" class="form-control" name="password">
                                     @error('password')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -147,42 +146,19 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">أعادة كلمة المرور</label>
-                                    <input type="password" class="form-control" name="confirm-password" @if($user->id !== Auth::user()->id) disabled @endif>
+                                    <input type="password" class="form-control" name="confirm-password">
                                     @error('confirm-password')
-                                    <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="form-group">
-                                    <label class="form-label">حالة المستخدم</label>
-                                    <select class="form-control " name="status">
-                                        <option >حالة المستخدم</option>
-                                        <option @if($user->status == 0) selected @endif value="0">موقوف عن العمل</option>
-                                        <option @if($user->status == 1) selected @endif value="1">مستمر في العمل</option>
-                                    </select>
-                                    @error('status')
-                                    <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="form-group">
-                                    <label class="form-label">الصلاحيات</label>
-                                    {!!  Form::select('roles_name[]',$roles,$userRole,array('class'=>'form-control select2','multiple')) !!}
-                                    @error('roles_name')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <button type="submit" class="btn btn-primary">تحديث</button>
-                                <a href="{{url('/'.$page='users')}}" class="btn btn-light">الغاء</a>
+                                <a href="{{url('/'.$page='dashboard')}}" class="btn btn-light">الغاء</a>
                             </div>
                         </div>
                     </form>
                 </div>
-                @endcan
             </div>
         </div>
     </div>

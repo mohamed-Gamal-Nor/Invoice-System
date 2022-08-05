@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +12,6 @@ class UserController extends Controller
 {
     function __construct()
     {
-
         $this->middleware('permission:قائمة المستخدمين', ['only' => ['index']]);
         $this->middleware('permission:أضافة مستخدمين', ['only' => ['create','store']]);
         $this->middleware('permission:تعديل مستخدم', ['only' => ['edit','update']]);
@@ -66,7 +66,7 @@ class UserController extends Controller
             $user->roles_name = $request->roles_name;
             $user->status = $request->status;
             $user->save();
-            //$user->sendEmailVerificationNotification();
+            $user->sendEmailVerificationNotification();
             $user->assignRole($request->roles_name);
             if (!empty($request->user_image)) {
                 $lastID = User::latest()->first()->id;
@@ -100,15 +100,48 @@ class UserController extends Controller
         $userRole = $user->roles->pluck('name','name')->all();
         return view('users.edit',compact('user','roles','userRole'));
     }
-
+    public function profileEdit($id)
+    {
+        if ($id == Auth::user()->id){
+            $user = User::find($id);
+            $roles = Role::pluck('name','name')->all();
+            $userRole = $user->roles->pluck('name','name')->all();
+            return view('users.editProfile',compact('user','roles','userRole'));
+        }
+    }
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            "status" => "required|in:0,1",
+            'roles_name' => 'required',
+        ],[
+            'status.required' => 'يجب اختيار الحالة ',
+            'status.in' => 'الحالة التي تم اختيارها غير صحيحة',
+            'roles_name.required' => 'يجب اختيار صلاحية ',
+        ]);
+        try {
+            $user = User::find($request->id);
+            $user->update([
+                'roles_name' => $request->roles_name,
+                'status' => $request->status,
+            ]);
+            DB::table('model_has_roles')->where('model_id',$id)->delete();
+            $user->assignRole($request->roles_name);
+            toastr()->success('تم تحديث بيانات المستخدم بنجاح');
+            return redirect()->route('users.index');
+        }catch (\Exception $e) {
+            //toastr()->error($e->getMessage());
+            toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
+            return redirect()->route('users.index');
+        };
+    }
+    public function updateProfile(Request $request, $id)
+    {
+
         $this->validate($request, [
             'name' => 'required|unique:users,name,'.$request->id.'|string|min:3|max:100',
             'email' => 'required|email|unique:users,email,'.$request->id.'|regex:/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,8}$/',
             'password' => 'nullable|same:confirm-password|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/',
-            "status" => "required|in:0,1",
-            'roles_name' => 'required',
             "user_image" => "nullable|mimes:jpg,jpeg,png|max:5000"
         ],[
             'name.required' => 'يجب ادخال اسم المستخدم',
@@ -123,15 +156,13 @@ class UserController extends Controller
             'password.required' => 'يجب أدخال كلمة مرور',
             'password.same' => 'كلمة المرور غير مطابقة',
             'password.regex' => 'يجب أن تحتوي كلمة المرور علي حروف كبيرةوصغير وارقام ورموز',
-            'status.required' => 'يجب اختيار الحالة ',
-            'status.in' => 'الحالة التي تم اختيارها غير صحيحة',
-            'roles_name.required' => 'يجب اختيار صلاحية ',
             'user_image.mimes' => "يجب ان تكون الصورة بصيغة JPG - PNG - JPEG",
             'user_image.max' => "يجب ان لا يزيد حجم الصورة عن خمسة ميجا",
         ]);
         try {
             $user = User::find($request->id);
             $newPassword=null;
+            $imageUpdate=null;
             if(!empty($request->password)){
                 $newPassword = Hash::make($request->password);
             }else{
@@ -141,23 +172,21 @@ class UserController extends Controller
             if(!empty($request->user_image)){
                 $imageUpdate = time() . '.' . $request->user_image->getClientOriginalExtension();
                 $request->user_image->storeAs($request->id, $imageUpdate, $disk = 'user_profile');
+            }else{
+                $imageUpdate = $user->user_image;
             }
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $newPassword,
-                'roles_name' => $request->roles_name,
                 'user_image' => $imageUpdate,
-                'status' => $request->status,
             ]);
-            DB::table('model_has_roles')->where('model_id',$id)->delete();
-            $user->assignRole($request->roles_name);
-            toastr()->success('تم تحديث بيانات المستخدم بنجاح');
-            return redirect()->route('users.index');
+            toastr()->success('تم تحديث الملف الشخصي بنجاح');
+            return redirect("./users/profileEdit/".$request->id);
         }catch (\Exception $e) {
             //toastr()->error($e->getMessage());
             toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
-            return redirect()->route('users.index');
+            return redirect("./users/profileEdit".$request->id);
         };
     }
 

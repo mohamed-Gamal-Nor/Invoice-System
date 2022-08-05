@@ -1,47 +1,89 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <meta name="robots" content="" />
+    <meta name="description" content="Edumin - Bootstrap Admin Dashboard" />
+    <meta property="og:title" content="Edumin - Bootstrap Admin Dashboard" />
+    <meta property="og:description" content="Edumin - Bootstrap Admin Dashboard" />
+    <meta property="og:image" content="https://edumin.dexignlab.com/xhtml/social-image.png" />
+    <meta name="format-detection" content="telephone=no">
+    <!-- FAVICONS ICON -->
+    <link rel="icon" href="{{asset('assets/images/favicon.ico')}}" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/favicon.png')}}" />
+    <!-- PAGE TITLE HERE -->
+    <title>{{ __('Reset Password') }}</title>
+    <!-- MOBILE SPECIFIC -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+</head>
+<body class="h-100">
+<div class="authincation h-100">
+    <div class="container h-100">
+        <div class="row justify-content-center h-100 align-items-center">
 
-                    <form method="POST" action="{{ route('password.email') }}">
-                        @csrf
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+            <div class="col-md-6">
+                @if (session('status'))
+                    <div class="col-xl-12">
+                        <div class="alert alert-success left-icon-big alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
+                            </button>
+                            <div class="media">
+                                <div class="alert-left-icon-big">
+                                    <span><i class="mdi mdi-check-circle-outline"></i></span>
+                                </div>
+                                <div class="media-body">
+                                    <h5 class="mt-1 mb-1">تهانينا!</h5>
+                                    <p class="text-dark">{{ __('We have emailed your password reset link!') }}</p>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                @endif
+                <div class="authincation-content">
+                    <div class="row no-gutters">
+                        <div class="col-xl-12">
+                            <div class="auth-form">
+                                <h4 class="text-center mb-4">{{ __('Reset Password') }}</h4>
+                                <form method="POST" action="{{ route('password.email') }}">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label><strong>{{ __('E-Mail Address') }}</strong></label>
+                                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
 
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
-                                </button>
+                                        @error('email')
+                                        <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
+                                        @enderror
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary btn-block">{{ __('Send Password Reset Link') }}</button>
+                                    </div>
+                                    <div class="form-group">
+                                        <a href="{{route('login')}}">{{ __('Login') }}</a>
+                                    </div>
+                                </form>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
+<!--**********************************
+    Scripts
+***********************************-->
+<!-- Required vendors -->
+<script type="text/javascript" src="{{ URL::asset('assets/vendor/global/global.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('assets/vendor/bootstrap-select/dist/js/bootstrap-select.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('assets/js/custom.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('assets/js/dlabnav-init.js') }}"></script>
+
+</body>
+</html>
