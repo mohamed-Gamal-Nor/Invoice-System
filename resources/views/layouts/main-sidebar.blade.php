@@ -76,16 +76,12 @@
                         <span class="nav-text">الاقسام & المنتجات</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">الاقسام</a>
-                            <ul aria-expanded="false">
-                                <li><a href="./page-error-400.html">قائمة الاقسام</a></li>
-                                <li><a href="./page-error-403.html">أضافة قسم</a></li>
-                            </ul>
-                        </li>
+                        <li><a href="{{url('/'.$page='productSection')}}">قائمة الاقسام</a></li>
+
                         <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">المنتجات</a>
                             <ul aria-expanded="false">
-                                <li><a href="./page-error-400.html">قائمة المنتجات</a></li>
-                                <li><a href="./page-error-403.html">أضافة منتج</a></li>
+                                <li><a href="{{url(('/'.$page='product'))}}">قائمة المنتجات</a></li>
+                                <li><a href="{{url('/'.$page='product/create')}}">أضافة منتج</a></li>
                             </ul>
                         </li>
                     </ul>

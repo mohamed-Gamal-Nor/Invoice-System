@@ -36,8 +36,9 @@
                         <div class="card-header">
                             <h4 class="card-title">قائمة المستخدمين</h4>
                             @can('أضافة مستخدمين')
+                                <a href="{{url('/'.$page='users/create')}}" class="btn btn-primary"><i class="las la-plus"></i> أضافة مستخدم</a>
                             @endcan
-                            <a href="{{url('/'.$page='users/create')}}" class="btn btn-primary"><i class="las la-plus"></i> أضافة مستخدم</a>
+
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

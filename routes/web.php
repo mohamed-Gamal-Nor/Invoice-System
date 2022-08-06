@@ -1,4 +1,7 @@
 <?php
+
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductSectionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
@@ -26,14 +29,18 @@ Route::group(['middleware' => ['guest']], function () {
 });
 
 Route::group(['middleware' => ['auth','verified']], function() {
+    // Dashboard Routes
+    Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
     // Roles Routes
     Route::resource('roles', RoleController::class);
     // Users Routes
     Route::get('/users/profileEdit/{id}', [UserController::class, 'profileEdit']);
     Route::put('/users/{id}/updateProfile', [UserController::class, 'updateProfile'])->name('users.updateProfile');
     Route::resource('users', UserController::class);
-    // Dashboard Routes
-    Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
+    // Product Section Routes
+    Route::resource('productSection', ProductSectionController::class);
+    // Product Routes
+    Route::resource('product', ProductController::class);
 });
 Route::get('/{page}', [AdminController::class,'index']);
 
