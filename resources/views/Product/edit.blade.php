@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    تعديل مستخدم / ({{$user->name}})
+    تعديل منتج / ({{$product->product_name}})
 @endsection
 @section('css')
     <style>
@@ -69,14 +69,14 @@
     <div class="row page-titles mx-0">
         <div class="col-sm-6 p-md-0">
             <div class="welcome-text">
-                <h4>تعديل مستخدم</h4>
+                <h4>تعديل منتج</h4>
             </div>
         </div>
         <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/' . $page='dashboard') }}">لوحة التحكم</a></li>
-                <li class="breadcrumb-item active"><a href="javascript:void(0);"> المستخدمين</a></li>
-                <li class="breadcrumb-item active"><a href="{{url('/'.$page='users/create')}}">تعديل مستخدم</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0);"> الاقسام & المنتجات</a></li>
+                <li class="breadcrumb-item active"><a href="{{url('/'.$page='product/create')}}">تعديل منتج</a></li>
             </ol>
         </div>
     </div>
@@ -84,11 +84,10 @@
         <div class="col-xl-12 col-xxl-12 col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title">تعديل مستخدم</h5>
+                    <h5 class="card-title">تعديل منتج / ({{$product->product_name}})</h5>
                 </div>
-                @can('تعديل مستخدم')
                 <div class="card-body">
-                    <form action="{{ route('users.update', 'test') }}" enctype="multipart/form-data" method="post">
+                    <form action="{{ route('product.update','test') }}" enctype="multipart/form-data" method="POST">
                         {{ method_field('patch') }}
                         @csrf
                         <div class="row">
@@ -96,93 +95,98 @@
                                 <div class="form-group">
                                     <div class="avatar-upload">
                                         <div class="avatar-edit">
-                                            <input type='file' id="imageUpload" name="user_image" accept=".png, .jpg, .jpeg" @if($user->id !== Auth::user()->id) disabled @endif/>
+                                            <input type='file' id="imageUpload" name="product_image" accept=".png, .jpg, .jpeg" />
                                             <label for="imageUpload"></label>
                                         </div>
                                         <div class="avatar-preview">
                                             <div id="imagePreview" style="background-image:
-                                            @if(empty($user->user_image))
-                                                url({{URL::asset('assets/images/avatar/1.png')}});
-                                            @else
-                                                url({{URL::asset('/storage/user_profile/'.$user->id .'/'. $user->user_image )}});
-                                            @endif
+                                                @if(empty($product->product_image))
+                                                    url({{URL::asset('assets/images/product/imageUpload.png')}});
+                                                @else
+                                                    url({{URL::asset('storage/product_image/'.$product->id .'/'. $product->product_image)}});
+                                                @endif
 
                                                 ">
                                             </div>
                                         </div>
                                     </div>
-                                    @error('user_image')
+                                    @error('product_image')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    <label class="form-label">أسم المتخدم</label>
-                                    <input type="text" class="form-control" name="name" value="{{ $user->name}}" @if($user->id !== Auth::user()->id) disabled @endif>
-                                    <input type="hidden" class="form-control" name="id" value="{{ $user->id}}">
-                                    @error('name')
+                                    <label class="form-label">أسم المنتج</label>
+                                    <input type="text" class="form-control" name="product_name" value="{{$product->product_name}}">
+                                    <input type="hidden" class="form-control" name="id" value="{{$product->id}}">
+                                    @error('product_name')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    <label class="form-label">البريد الاليكتروني</label>
-                                    <input type="email" class="form-control" name="email" value="{{ $user->email}}" @if($user->id !== Auth::user()->id) disabled @endif>
-                                    @error('email')
+                                    <label class="form-label">رقم الموديل</label>
+                                    <input type="text" class="form-control" name="product_number" value="{{$product->product_number}}">
+                                    @error('product_number')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    <label class="form-label">كلمة مرور</label>
-                                    <input type="password" class="form-control" name="password" @if($user->id !== Auth::user()->id) disabled @endif>
-                                    @error('password')
+                                    <label class="form-label">سعر الشراء</label>
+                                    <input type="number" min="1"  class="form-control" name="purchasing_price"  value="{{$product->purchasing_price}}">
+                                    @error('purchasing_price')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    <label class="form-label">أعادة كلمة المرور</label>
-                                    <input type="password" class="form-control" name="confirm-password" @if($user->id !== Auth::user()->id) disabled @endif>
-                                    @error('confirm-password')
+                                    <label class="form-label">سعر البيع</label>
+                                    <input type="number" class="form-control" name="selling_price" value="{{$product->selling_price}}">
+                                    @error('selling_price')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    <label class="form-label">حالة المستخدم</label>
-                                    <select class="form-control " name="status">
-                                        <option >حالة المستخدم</option>
-                                        <option @if($user->status == 0) selected @endif value="0">موقوف عن العمل</option>
-                                        <option @if($user->status == 1) selected @endif value="1">مستمر في العمل</option>
+                                    <label class="form-label">القسم</label>
+                                    <select class="form-control " name="section">
+                                        <option >أختار القسم</option>
+                                        @foreach($productSection as $section)
+                                            <option value="{{$section->id}}"
+                                                    @if($section->id == $product->section)
+                                                    selected
+                                                    @endif
+                                            >{{$section->name}}</option>
+                                        @endforeach
                                     </select>
-                                    @error('status')
+                                    @error('section')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    <label class="form-label">الصلاحيات</label>
-                                    {!!  Form::select('roles_name[]',$roles,$userRole,array('class'=>'form-control select2','multiple')) !!}
-                                    @error('roles_name')
+                                    <label class="form-label">ملاحظات</label>
+                                    <textarea class="form-control" rows="4" name="description">{{$product->description}}</textarea>
+                                    @error('description')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <button type="submit" class="btn btn-primary">تحديث</button>
-                                <a href="{{url('/'.$page='users')}}" class="btn btn-light">الغاء</a>
+                                <a href="{{url('/'.$page='product')}}" class="btn btn-light">الغاء</a>
                             </div>
                         </div>
                     </form>
                 </div>
-                @endcan
             </div>
         </div>
     </div>

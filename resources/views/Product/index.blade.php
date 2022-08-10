@@ -29,69 +29,85 @@
                     <h4 class="card-title">قائمة المنتجات</h4>
                     <a href="{{url('/'.$page='product/create')}}" class="btn btn-primary"><i class="las la-plus"></i> أضافة منتج</a>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="example3" class="display" style="min-width: 845px">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th></th>
-                                <th>اسم المنتج</th>
-                                <th>رقم الموديل</th>
-                                <th>القسم</th>
-                                <th>سعر الشراء</th>
-                                <th>سعر البيع</th>
-                                <th>قيمة الربح</th>
-                                <th>العمليات</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php $i=0;?>
-                            @foreach($products as $product)
-                                <?php $i++?>
-                                <tr>
-                                    <td><strong>{{$i}}</strong></td>
-                                    <td>
-                                        <img class="" width="35"
-                                             src="{{URL::asset('assets/images/avatar/1.png')}}"
-                                             alt="User Image"></td></td>
-                                    <td>{{$product->product_name}}</td>
-                                    <td>{{$product->product_number}}</td>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        @foreach($products as $product)
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row m-b-30">
+                            <div class="col-md-4">
+                                <div class="new-arrival-product mb-3">
+                                    <div class="new-arrivals-img-contnent">
+                                        <img class="img-fluid"
+                                             @if(empty($product->product_image))
+                                                src="{{URL::asset('assets/images/product/imageUpload.png')}}"
+                                             @else
+                                                src="{{URL::asset('storage/product_image/'.$product->id .'/'. $product->product_image)}}"
+                                             @endif
+                                             alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="new-arrival-content position-relative">
+                                    <h4>{{$product->product_name}}</h4>
+                                    <p class="price">{{ number_format($product->selling_price, 2) }} EGP</p>
+                                    <p>Model number: <span class="item"> {{$product->product_number}} <i class="fa fa-check-circle text-success"></i></span></p>
+                                    <p>Purchasing price: <span class="item">{{ number_format($product->purchasing_price, 2) }} EGP <i class="fa fa-check-circle text-success"></i></span></p>
+                                    <p>profit value: <span class="item">{{ number_format($product->selling_price - $product->purchasing_price, 2) }} EGP <i class="fa fa-check-circle text-success"></i></span></p>
+                                    <p>Created By: <span class="item">{{ $product->user->name}} <i class="fa fa-check-circle text-success"></i></span></p>
+                                    <p>Created At: <span class="item">{{ $product->created_at->todatestring()}} <i class="fa fa-check-circle text-success"></i></span></p>
+                                    <p>Last Update: <span class="item">
+                                            @if(!empty($product->updated_at))
+                                                {{ $product->updated_at->todatestring()}}
+                                            @else
+                                                لم يتم تعديل هذا المنتج
+                                            @endif
 
-                                    <td>{{$product->Productsection->name}}</td>
-                                    <td>{{ number_format($product->purchasing_price, 2) }}</td>
-                                    <td>{{ number_format($product->selling_price, 2) }}</td>
-                                    <td class="text-success">{{ number_format($product->selling_price - $product->purchasing_price, 2) }}</td>
-                                    <td>
-                                        <a href="#" class="btn btn-sm btn-primary" ><i class="la la-pencil"></i></a>
-                                        <button  class="btn btn-sm btn-danger" data-toggle="modal" data-target=".SectionDelete" data-id="{{ $product->id }}"><i class="la la-trash-o"></i></button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                                            <i class="fa fa-check-circle text-success"></i></span></p>
+                                    <p class="text-content text-center">
+                                        @if(empty($product->description))
+                                            لا توجد ملاحظات علي هذا المنتج
+                                        @else
+                                            {{$product->description}}
+                                        @endif
+
+                                    </p>
+                                    <p class="text-content text-center">
+                                        <a href="{{ route('product.edit', $product->id) }}" class="btn btn-primary" ><i class="la la-pencil"></i> تعديل المنتج</a>
+                                        <button  class="btn btn-danger" data-toggle="modal" data-target=".SectionDelete" data-id="{{ $product->id }}"><i class="la la-trash"></i> حذف المنتج </button>
+                                    </p>
+                                    <div class="comment-review star-rating text-right">
+                                        <p> القسم: <span class="item">{{$product->Productsection->name}}</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endforeach
     </div>
     <!-- Modal Delete-->
     <div class="modal fade SectionDelete" id="SectionDelete">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">حذف القسم</h5>
+                    <h5 class="modal-title">حذف المنتج</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('productSection.destroy','test') }}" method="post">
+                <form action="{{ route('product.destroy','test') }}" method="post">
                     {{ method_field('Delete') }}
                     @csrf
                     <input type="hidden" name="id" id="DeleteId" value="">
                     <div class="modal-body">
 
-                        <p>هل تريد حذف القسم نهائيا؟ </p>
-                        <p class="text-danger">ملحوظة : اذا كان هذا القسم مرتبط بعلاقات اخري لن يتم حذفه. </p>
+                        <p>هل تريد حذف المنتج نهائيا؟ </p>
+                        <p class="text-danger">ملحوظة : اذا كان هذا المنتج مرتبط بعلاقات اخري لن يتم حذفه. </p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">الغاء</button>
