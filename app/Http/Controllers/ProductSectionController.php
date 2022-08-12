@@ -76,8 +76,7 @@ class ProductSectionController extends Controller
             return redirect()->route('productSection.index');
 
         }catch (\Exception $e) {
-            toastr()->error(trans($e->getMessage()));
-            //toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
+            toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
             return redirect()->route('productSection.index');
         };
     }

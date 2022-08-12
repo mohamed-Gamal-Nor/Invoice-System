@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductSectionController;
+use App\Http\Controllers\ShippingAreaController;
+use App\Http\Controllers\ShippingController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
@@ -41,6 +43,10 @@ Route::group(['middleware' => ['auth','verified']], function() {
     Route::resource('productSection', ProductSectionController::class);
     // Product Routes
     Route::resource('product', ProductController::class);
+    // Shipping area Routes
+    Route::resource('shippingArea', ShippingAreaController::class);
+    // Shipping Routes
+    Route::resource('shipping', ShippingController::class);
 });
 Route::get('/{page}', [AdminController::class,'index']);
 

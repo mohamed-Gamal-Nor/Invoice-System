@@ -91,8 +91,9 @@
                         <span class="nav-text">الشحن</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="all-courses.html">قائمة مناديب الشحن</a></li>
-                        <li><a href="add-courses.html">أضافة مندوب</a></li>
+                        <li><a href="{{url('/'.$page='shipping')}}">قائمة مناديب الشحن</a></li>
+                        <li><a href="{{url('/'.$page='shipping/create')}}">أضافة مندوب شحن</a></li>
+                        <li><a href="{{url('/'.$page='shippingArea')}}">مناطق الشحن</a></li>
                     </ul>
                 </li>
                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
