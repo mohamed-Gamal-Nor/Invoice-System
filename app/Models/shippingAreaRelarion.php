@@ -9,4 +9,7 @@ class shippingAreaRelarion extends Model
 {
     use HasFactory;
     protected $guarded=[];
+    public function areaName(){
+        return $this->belongsTo('App\Models\shippingArea','area');
+    }
 }

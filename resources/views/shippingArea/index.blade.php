@@ -63,7 +63,7 @@
                                 <th>العمليات</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="text-center">
                             <?php $i=0;?>
                             @foreach($shippingArea as $ship)
                                 <?php $i++?>
@@ -79,7 +79,7 @@
                                             {{$ship->description}}
                                         @endif
                                     </td>
-                                    <td>0.00</td>
+                                    <td>{{$ship->shippingAreaRealation->count()}}</td>
                                     <td>{{$ship->user->name}}</td>
                                     <td>{{$ship->created_at->todatestring() }}</td>
                                     <td>

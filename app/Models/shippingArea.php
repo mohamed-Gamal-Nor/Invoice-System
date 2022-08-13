@@ -12,4 +12,8 @@ class shippingArea extends Model
     public function user(){
         return $this->belongsTo('App\Models\User','created_by');
     }
+
+    public function shippingAreaRealation(){
+        return $this->hasMany('App\Models\shippingAreaRelarion','area');
+    }
 }

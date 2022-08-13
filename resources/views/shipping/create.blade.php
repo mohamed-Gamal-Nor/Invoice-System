@@ -109,8 +109,8 @@
                                 </table>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12">
-                                <button type="submit" class="btn btn-primary">حفظ</button>
-                                <a href="{{url('/'.$page='shipping')}}" class="btn btn-light">الغاء</a>
+                                <button type="submit" class="btn btn-primary">{{__('Save')}}</button>
+                                <a href="{{url('/'.$page='shipping')}}" class="btn btn-light">{{__('Cancel')}}</a>
                             </div>
                         </div>
                     </form>

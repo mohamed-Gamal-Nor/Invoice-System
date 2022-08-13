@@ -37,7 +37,6 @@
                                 <th>#</th>
                                 <th>اسم المندوب / شركة الشحن</th>
                                 <th>رقم الهاتف</th>
-                                <th>ملاحظات</th>
                                 <th>عدد الاوردرات المسلمة</th>
                                 <th>عدد الاوردرات المرتجع</th>
                                 <th>عدد المناطق</th>
@@ -55,14 +54,6 @@
                                     <td><strong>{{$i}}</strong></td>
                                     <td>{{$ship->name}}</td>
                                     <td>{{$ship->phone}}</td>
-                                    <td>
-
-                                        @if(empty($ship->description))
-                                            <span class="text-primary">لا يوجد ملاحظات لعرضها</span>
-                                        @else
-                                            {{$ship->description}}
-                                        @endif
-                                    </td>
                                     <td>0.00</td>
                                     <td>0.00</td>
                                     <td>{{$ship->shippingArea->count()}}</td>
@@ -78,7 +69,7 @@
                                     </td>
                                     <td>
                                         <a  href="{{ route('shipping.edit', $ship->id) }}"  class="btn btn-sm btn-primary" ><i class="la la-pencil"></i></a>
-
+                                        <a  href="{{ route('shipping.show', $ship->id) }}"  class="btn btn-sm btn-success" ><i class="la la-eye"></i></a>
                                         <button  class="btn btn-sm btn-danger" data-toggle="modal" data-target=".SectionDelete" data-id="{{ $ship->id }}"><i class="la la-trash-o"></i></button>
                                     </td>
                                 </tr>
@@ -90,45 +81,6 @@
             </div>
         </div>
     </div>
-
-    <!--Model Edit-->
-    <div class="modal fade product-section-edit" tabindex="-1" role="dialog" aria-hidden="true" id="product-section-edit">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">تعديل مندوب / شركة شحن</h5>
-                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                    </button>
-                </div>
-                <form action="{{route('shipping.update','test')}}" method='post'>
-                    {{ method_field('patch') }}
-                    {{ csrf_field() }}
-                    <div class="modal-body">
-
-                        <div class="form-group">
-                            <label>أسم المندوب</label>
-                            <input type="hidden" id="id" name="id">
-                            <input type="text" class="form-control input-default" name="name" id="name" >
-                        </div>
-                        <div class="form-group">
-                            <label>رقم الهاتف</label>
-                            <input type="phone" class="form-control input-default" name="phone" id="phone" >
-                        </div>
-                        <div class="form-group">
-                            <label>ملاحظات</label>
-                            <textarea class="form-control" rows="4"  id="description" name="description"></textarea>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('Close')}}</button>
-                        <button type="submit" class="btn btn-primary">{{__('Update')}}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!--Model Edit-->
     <!-- Modal Delete-->
     <div class="modal fade SectionDelete" id="SectionDelete">
         <div class="modal-dialog" role="document">
@@ -160,20 +112,6 @@
     <!-- Datatable -->
     <script type="text/javascript" src="{{ URL::asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('assets/js/plugins-init/datatables.init.js') }}"></script>
-    <script>
-        $('#product-section-edit').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget)
-            var id = button.data('id')
-            var Shipping_name = button.data('shipping_name')
-            var Shipping_phone = button.data('shipping_phone')
-            var description = button.data('description')
-            var modal = $(this)
-            modal.find('#id').val(id);
-            modal.find('#name').val(Shipping_name);
-            modal.find('#phone').val(Shipping_phone);
-            modal.find('#description').val(description);
-        })
-    </script>
     <script>
         $('#SectionDelete').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)

@@ -19,7 +19,7 @@ class CreateShippingAreaRelarionsTable extends Migration
             $table->foreign('shipping_name')
                 ->references('id')
                 ->on('shippings')
-                ->onDelete('restrict')
+                ->onDelete('CASCADE')
                 ->onUpdate('CASCADE');
             $table->unsignedBigInteger('area');
             $table->foreign('area')

@@ -82,17 +82,24 @@ class ShippingController extends Controller
         };
 
     }
+    public function show($id)
+    {
+        $shipping = shipping::find($id);
+        return view('shipping.show',compact('shipping'));
+    }
     public function edit($id)
     {
         $shipping = shipping::find($id);
         $shippingArea = shippingArea::select('id','name')->get();
         return view('shipping.edit',compact('shipping','shippingArea'));
     }
-    public function update(Request $request)
+    public function update(Request $request,$id)
     {
         $this->validate($request, [
             'name' => 'required|max:255|string|unique:shippings,name,'.$request->id,
             'phone' => 'required|numeric|digits:11|regex:/(01)[0-5]{1}[0-9]{8}/|unique:shippings,phone,'.$request->id,
+            'area.*' => 'required|exists:shipping_areas,id|distinct',
+            'price.*' => 'required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
             'description' => 'nullable|string|max:255',
         ],[
             'name.required' =>'يجب ادخال اسم المندوب',
@@ -104,9 +111,16 @@ class ShippingController extends Controller
             'phone.unique'=>'رقم الهاتف مستخدم من قبل',
             'phone.digits'=>'رقم الهاتف هذا يجب ان لايقل او يزيد عن 11 رقم',
             'phone.regex'=>'رقم الهاتف غير صحيح',
+            'area.*.required'=>'يجب اختيار المناطق',
+            'area.*.exists'=>'هذة المنطقة غير مدرجة بالنظام',
+            'area.*.distinct'=>'هذة المنطقة تم ادخالها مرتين',
+            'price.*.required'=>'يجب أدخال السعر',
+            'price.*.regex'=>'هذا السعر غير صحيح',
             'description.string' =>'ملاحظات غير صحيحة',
             'description.max' =>'ملاحظات كبيرة جداا',
         ]);
+
+
         try {
             $shipping = shipping::findOrFail($request->id);
             $shipping->update([
@@ -114,7 +128,25 @@ class ShippingController extends Controller
                 "phone" => $request->phone,
                 "description" => $request->description,
             ]);
-
+            $items = shippingAreaRelarion::where('shipping_name',$request->id)->get();
+            foreach($request->area as $are=>$v){
+                $item_id=$request->item_id[$are];
+                if(!empty($item_id)){
+                    $mat = shippingAreaRelarion::find($item_id);
+                    $data1 = array(
+                        "area"=>$request->area[$are],
+                        'price'=>$request->price[$are],
+                    );
+                    $mat->update($data1);
+                }else{
+                    $data2 = array(
+                        'shipping_name'=>$request->id,
+                        "area"=>$request->area[$are],
+                        'price'=>$request->price[$are],
+                    );
+                    shippingAreaRelarion::insert($data2);
+                }
+            }
             toastr()->success(trans('تم تعديل بيانات المندوب بنجاح'));
             return redirect()->route('shipping.index');
 
