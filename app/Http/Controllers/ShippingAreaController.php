@@ -78,6 +78,7 @@ class ShippingAreaController extends Controller
                 "name" => $request->name,
                 "price" => $request->price,
                 "description" => $request->description,
+                "updated_at" => date("Y-m-d h:i:s"),
             ]);
 
             toastr()->success(trans('تم تعديل بيانات المنطقة بنجاح'));

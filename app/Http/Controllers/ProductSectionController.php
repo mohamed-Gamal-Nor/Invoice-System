@@ -70,6 +70,7 @@ class ProductSectionController extends Controller
             $section->update([
                 "name" => $request->name,
                 "description" => $request->description,
+                "updated_at" => date("Y-m-d h:i:s"),
             ]);
 
             toastr()->success(trans('تم تعديل بيانات القسم بنجاح'));

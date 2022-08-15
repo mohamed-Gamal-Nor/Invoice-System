@@ -124,6 +124,7 @@ class UserController extends Controller
             $user->update([
                 'roles_name' => $request->roles_name,
                 'status' => $request->status,
+                "updated_at" => date("Y-m-d h:i:s"),
             ]);
             DB::table('model_has_roles')->where('model_id',$id)->delete();
             $user->assignRole($request->roles_name);
@@ -180,6 +181,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => $newPassword,
                 'user_image' => $imageUpdate,
+                "updated_at" => date("Y-m-d h:i:s"),
             ]);
             toastr()->success('تم تحديث الملف الشخصي بنجاح');
             return redirect("./users/profileEdit/".$request->id);

@@ -155,6 +155,7 @@ class ProductController extends Controller
                 "section" => $request->section,
                 "product_image" => $imageUpdate,
                 "description" => $request->description,
+                "updated_at" => date("Y-m-d h:i:s"),
             ]);
             toastr()->success(trans('تم تعديل المنتج بنجاح'));
             return redirect()->route('product.index');

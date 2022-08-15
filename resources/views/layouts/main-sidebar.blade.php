@@ -101,8 +101,8 @@
                         <span class="nav-text">الموردين</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="all-courses.html">قائمة الموردين</a></li>
-                        <li><a href="add-courses.html">أضافة مورد</a></li>
+                        <li><a href="{{url('/'.$page='supplier')}}">قائمة الموردين</a></li>
+                        <li><a href="{{url('/'.$page='supplier/create')}}">أضافة مورد</a></li>
                     </ul>
                 </li>
                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">

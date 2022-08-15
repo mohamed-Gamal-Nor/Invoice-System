@@ -70,14 +70,14 @@ class ShippingController extends Controller
                     'shipping_name'=>$lastID,
                     "area"=>$request->area[$are],
                     'price'=>$request->price[$are],
+                    "created_at" => date("Y-m-d h:i:s"),
                 );
                 shippingAreaRelarion::insert($data2);
             }
             toastr()->success(trans('تم أضافة المندوب بنجاح'));
             return redirect()->route('shipping.index');
         }catch (\Exception $e) {
-            toastr()->error($e->getMessage());
-            //toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
+            toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
             return redirect()->route('shipping.index');
         };
 
@@ -127,6 +127,7 @@ class ShippingController extends Controller
                 "name" => $request->name,
                 "phone" => $request->phone,
                 "description" => $request->description,
+                "updated_at" => date("Y-m-d h:i:s"),
             ]);
             $items = shippingAreaRelarion::where('shipping_name',$request->id)->get();
             foreach($request->area as $are=>$v){
@@ -136,6 +137,7 @@ class ShippingController extends Controller
                     $data1 = array(
                         "area"=>$request->area[$are],
                         'price'=>$request->price[$are],
+                        "updated_at" => date("Y-m-d h:i:s"),
                     );
                     $mat->update($data1);
                 }else{
@@ -143,6 +145,7 @@ class ShippingController extends Controller
                         'shipping_name'=>$request->id,
                         "area"=>$request->area[$are],
                         'price'=>$request->price[$are],
+                        "created_at" => date("Y-m-d h:i:s"),
                     );
                     shippingAreaRelarion::insert($data2);
                 }
