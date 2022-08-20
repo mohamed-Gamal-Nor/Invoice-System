@@ -51,7 +51,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">أسم المندوب / شركة الشحن</label>
-                                    <input type="text" class="form-control" name="name" value="{{$shipping->name}}">
+                                    <input type="text" class="form-control" name="name" value="{{$shipping->name}}" required>
                                     <input type="hidden" class="form-control" name="id" value="{{$shipping->id}}">
                                     @error('name')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
@@ -61,7 +61,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">رقم الهاتف</label>
-                                    <input type="tel" class="form-control" name="phone" value="{{$shipping->phone}}">
+                                    <input type="tel" class="form-control" name="phone" value="{{$shipping->phone}}" required>
                                     @error('phone')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -89,7 +89,7 @@
                                     @foreach($shipping->shippingArea as $key => $item)
                                         <tr>
                                             <td>
-                                                <select class="form-control" id="sel2" name="area[]">
+                                                <select class="form-control" id="sel2" name="area[]" required>
                                                     <option>اختار منطقة الشحن</option>
                                                     @foreach($shippingArea as $area)
                                                         <option
@@ -102,8 +102,8 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input type="number" class="form-control" placeholder="سعر الشحن" name="price[]" value="{{$item->price}}">
-                                                <input type="hidden" class="form-control"  name="item_id[]" value="{{$item->id}}">
+                                                <input type="number" class="form-control" placeholder="سعر الشحن" name="price[]" required value="{{$item->price}}">
+                                                <input type="hidden" class="form-control"  name="item_id[]" required value="{{$item->id}}">
                                             </td>
                                             <td class="text-center">
                                             </td>
@@ -145,8 +145,8 @@
         });
         function addRow(){
             var tr = '<tr>' +
-                '<td> <select class="form-control" id="sel2" name="area[]"><option>اختار منطقة الشحن</option> @foreach($shippingArea as $area)<option value="{{$area->id}}">{{$area->name}}</option>@endforeach</select></td>'+
-                '<td> <input type="number" class="form-control" placeholder="سعر الشحن" name="price[]"><input class="form-control" name="item_id[]" type="text" readonly="readonly" hidden></td>'+
+                '<td> <select class="form-control" id="sel2" name="area[]" required><option>اختار منطقة الشحن</option> @foreach($shippingArea as $area)<option value="{{$area->id}}">{{$area->name}}</option>@endforeach</select></td>'+
+                '<td> <input type="number" class="form-control" placeholder="سعر الشحن" name="price[]" required><input class="form-control" name="item_id[]" type="text" readonly="readonly" hidden></td>'+
                 '<td class="text-center"> <a class="btn btn-danger remove">{{__('Delete')}}</a> </td>'+
                 '</tr>';
             $("tbody").append(tr);

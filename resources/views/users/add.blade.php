@@ -110,7 +110,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">أسم المتخدم</label>
-                                    <input type="text" class="form-control" name="name">
+                                    <input type="text" class="form-control" name="name" required>
                                     @error('name')
                                         <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -119,7 +119,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">البريد الاليكتروني</label>
-                                    <input type="email" class="form-control" name="email">
+                                    <input type="email" class="form-control" name="email" required>
                                     @error('email')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -128,7 +128,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">كلمة مرور</label>
-                                    <input type="password" class="form-control" name="password">
+                                    <input type="password" class="form-control" name="password" required>
                                     @error('password')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -137,7 +137,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">أعادة كلمة المرور</label>
-                                    <input type="password" class="form-control" name="confirm-password">
+                                    <input type="password" class="form-control" name="confirm-password" required>
                                     @error('confirm-password')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -146,7 +146,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">حالة المستخدم</label>
-                                    <select class="form-control " name="status">
+                                    <select class="form-control " name="status" required>
                                         <option >حالة المستخدم</option>
                                         <option value="0">موقوف عن العمل</option>
                                         <option value="1">مستمر في العمل</option>
@@ -159,7 +159,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">الصلاحيات</label>
-                                    {!!  Form::select('roles_name[]',$roles,[],array('class'=>'form-control select2','multiple')) !!}
+                                    {!!  Form::select('roles_name[]',$roles,[],array('class'=>'form-control select2','multiple','required')) !!}
                                     @error('roles_name')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror

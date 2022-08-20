@@ -113,7 +113,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label>أسم القسم</label>
-                            <input type="text" class="form-control input-default" name="name">
+                            <input type="text" class="form-control input-default" name="name" required>
                         </div>
                         <div class="form-group">
                             <label>ملاحظات</label>
@@ -146,7 +146,7 @@
                         <div class="form-group">
                             <label>أسم القسم</label>
                             <input type="hidden" id="id" name="id">
-                            <input type="text" class="form-control input-default" name="name" id="section_name" >
+                            <input type="text" class="form-control input-default" name="name" id="section_name" required>
                         </div>
                         <div class="form-group">
                             <label>ملاحظات</label>

@@ -110,7 +110,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">أسم المنتج</label>
-                                    <input type="text" class="form-control" name="product_name">
+                                    <input type="text" class="form-control" name="product_name" required>
                                     @error('product_name')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -119,7 +119,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">رقم الموديل</label>
-                                    <input type="text" class="form-control" name="product_number">
+                                    <input type="text" class="form-control" name="product_number" required>
                                     @error('product_number')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -128,7 +128,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">سعر الشراء</label>
-                                    <input type="number" min="1"  class="form-control" name="purchasing_price">
+                                    <input type="number" min="1"  class="form-control" name="purchasing_price" required>
                                     @error('purchasing_price')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -137,7 +137,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">سعر البيع</label>
-                                    <input type="number" class="form-control" name="selling_price">
+                                    <input type="number" class="form-control" name="selling_price" required>
                                     @error('selling_price')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -146,7 +146,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">القسم</label>
-                                    <select class="form-control " name="section">
+                                    <select class="form-control " name="section" required>
                                         <option >أختار القسم</option>
                                         @foreach($productSection as $section)
                                             <option value="{{$section->id}}">{{$section->name}}</option>
@@ -168,8 +168,8 @@
                             </div>
 
                             <div class="col-lg-12 col-md-12 col-sm-12">
-                                <button type="submit" class="btn btn-primary">حفظ</button>
-                                <a href="{{url('/'.$page='product')}}" class="btn btn-light">الغاء</a>
+                                <button type="submit" class="btn btn-primary">{{__('Save')}}</button>
+                                <a href="{{url('/'.$page='product')}}" class="btn btn-light">{{__('Cancel')}}</a>
                             </div>
                         </div>
                     </form>

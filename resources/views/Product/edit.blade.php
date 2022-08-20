@@ -118,7 +118,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">أسم المنتج</label>
-                                    <input type="text" class="form-control" name="product_name" value="{{$product->product_name}}">
+                                    <input type="text" class="form-control" name="product_name" value="{{$product->product_name}}" required>
                                     <input type="hidden" class="form-control" name="id" value="{{$product->id}}">
                                     @error('product_name')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
@@ -128,7 +128,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">رقم الموديل</label>
-                                    <input type="text" class="form-control" name="product_number" value="{{$product->product_number}}">
+                                    <input type="text" class="form-control" name="product_number" value="{{$product->product_number}}" required>
                                     @error('product_number')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -137,7 +137,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">سعر الشراء</label>
-                                    <input type="number" min="1"  class="form-control" name="purchasing_price"  value="{{$product->purchasing_price}}">
+                                    <input type="number" min="1"  class="form-control" name="purchasing_price" required value="{{$product->purchasing_price}}">
                                     @error('purchasing_price')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -146,7 +146,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">سعر البيع</label>
-                                    <input type="number" class="form-control" name="selling_price" value="{{$product->selling_price}}">
+                                    <input type="number" class="form-control" name="selling_price" required value="{{$product->selling_price}}">
                                     @error('selling_price')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -155,7 +155,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">القسم</label>
-                                    <select class="form-control " name="section">
+                                    <select class="form-control " name="section" required>
                                         <option >أختار القسم</option>
                                         @foreach($productSection as $section)
                                             <option value="{{$section->id}}"
@@ -181,8 +181,8 @@
                             </div>
 
                             <div class="col-lg-12 col-md-12 col-sm-12">
-                                <button type="submit" class="btn btn-primary">تحديث</button>
-                                <a href="{{url('/'.$page='product')}}" class="btn btn-light">الغاء</a>
+                                <button type="submit" class="btn btn-primary">{{__('Update')}}</button>
+                                <a href="{{url('/'.$page='product')}}" class="btn btn-light">{{__('Cancel')}}</a>
                             </div>
                         </div>
                     </form>

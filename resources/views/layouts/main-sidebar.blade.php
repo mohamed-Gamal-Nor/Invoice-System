@@ -110,8 +110,8 @@
                         <span class="nav-text">العملاء</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="all-courses.html">قائمة العملاء</a></li>
-                        <li><a href="add-courses.html">أضافة عميل</a></li>
+                        <li><a href="{{url('/'.$page='customer')}}">قائمة العملاء</a></li>
+                        <li><a href="{{url('/'.$page='customer/create')}}">أضافة عميل</a></li>
                     </ul>
                 </li>
                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">

@@ -35,7 +35,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">أسم المورد*</label>
-                                    <input type="text" class="form-control" name="name" value="{{$supplier->name}}">
+                                    <input type="text" class="form-control" name="name" value="{{$supplier->name}}"required>
                                     <input type="hidden" class="form-control" name="id" value="{{$supplier->id}}">
                                     @error('name')
                                         <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
@@ -45,7 +45,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">*رقم الهاتف</label>
-                                    <input type="tel" class="form-control" name="phone" value="{{$supplier->phone}}">
+                                    <input type="tel" class="form-control" name="phone" value="{{$supplier->phone}}" required>
                                     @error('phone')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -54,7 +54,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">العنوان</label>
-                                    <input type="text" class="form-control" name="address" value="{{$supplier->address}}">
+                                    <input type="text" class="form-control" name="address" value="{{$supplier->address}}" required>
                                     @error('address')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -63,7 +63,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">رصيد بداية المدة</label>
-                                    <input type="number" class="form-control" name="start_balance" value="{{$supplier->start_balance}}">
+                                    <input type="number" class="form-control" name="start_balance" value="{{$supplier->start_balance}}" required>
                                     @error('start_balance')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -72,7 +72,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">حالة المورد</label>
-                                    <select class="form-control " name="status">
+                                    <select class="form-control " name="status" required>
                                         <option >حالة المورد</option>
                                         <option value="0" @if($supplier->status == 0) selected @endif>موقوف عن العمل</option>
                                         <option value="1" @if($supplier->status == 1) selected @endif>مستمر في العمل</option>

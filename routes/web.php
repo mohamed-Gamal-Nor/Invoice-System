@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductSectionController;
 use App\Http\Controllers\ShippingAreaController;
@@ -50,6 +51,8 @@ Route::group(['middleware' => ['auth','verified']], function() {
     Route::resource('shipping', ShippingController::class);
     // supplier Routes
     Route::resource('supplier', SupplierController::class);
+    // customer Routes
+    Route::resource('customer', CustomerController::class);
 });
 Route::get('/{page}', [AdminController::class,'index']);
 

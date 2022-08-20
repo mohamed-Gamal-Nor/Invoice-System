@@ -154,11 +154,11 @@
                         <div class="form-group">
                             <label>أسم المنطقة</label>
                             <input type="hidden" id="id" name="id">
-                            <input type="text" class="form-control input-default" name="name" id="name" >
+                            <input type="text" class="form-control input-default" name="name" id="name" required>
                         </div>
                         <div class="form-group">
                             <label>سعر الشحن</label>
-                            <input type="number" class="form-control input-default" name="price" id="phone" >
+                            <input type="number" class="form-control input-default" name="price" id="phone" required>
                         </div>
                         <div class="form-group">
                             <label>ملاحظات</label>

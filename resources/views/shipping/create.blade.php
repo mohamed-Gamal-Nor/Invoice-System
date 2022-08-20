@@ -50,7 +50,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">أسم المندوب / شركة الشحن</label>
-                                    <input type="text" class="form-control" name="name">
+                                    <input type="text" class="form-control" name="name" required>
                                     @error('name')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -59,7 +59,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label class="form-label">رقم الهاتف</label>
-                                    <input type="tel" class="form-control" name="phone">
+                                    <input type="tel" class="form-control" name="phone" required>
                                     @error('phone')
                                     <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
                                     @enderror
@@ -86,7 +86,7 @@
                                     <tbody>
                                     <tr>
                                         <td>
-                                            <select class="form-control" id="sel2" name="area[]">
+                                            <select class="form-control" id="sel2" name="area[]" required>
                                                 <option>اختار منطقة الشحن</option>
                                                 @foreach($shippingArea as $area)
                                                     <option value="{{$area->id}}">{{$area->name}}</option>
@@ -94,7 +94,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control" placeholder="سعر الشحن" name="price[]">
+                                            <input type="number" class="form-control" placeholder="سعر الشحن" name="price[]" required>
                                         </td>
                                         <td class="text-center">
                                         </td>
@@ -136,8 +136,8 @@
         });
         function addRow(){
             var tr = '<tr>' +
-                '<td> <select class="form-control" id="sel2" name="area[]"><option>اختار منطقة الشحن</option> @foreach($shippingArea as $area)<option value="{{$area->id}}">{{$area->name}}</option>@endforeach</select></td>'+
-                '<td> <input type="number" class="form-control" placeholder="سعر الشحن" name="price[]"></td>'+
+                '<td> <select class="form-control" id="sel2" name="area[]" required><option>اختار منطقة الشحن</option> @foreach($shippingArea as $area)<option value="{{$area->id}}">{{$area->name}}</option>@endforeach</select></td>'+
+                '<td> <input type="number" class="form-control" placeholder="سعر الشحن" name="price[]" required></td>'+
                 '<td class="text-center"> <a class="btn btn-danger remove">{{__('Delete')}}</a> </td>'+
                 '</tr>';
             $("tbody").append(tr);
