@@ -114,14 +114,11 @@
                         <li><a href="{{url('/'.$page='customer/create')}}">أضافة عميل</a></li>
                     </ul>
                 </li>
-                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                <li><a class="ai-icon" href="{{ url('/' . $page='store') }}" aria-expanded="false">
                         <i class="las la-campground"></i>
-                        <span class="nav-text">المخازن</span>
+
+                        <span class="nav-text">قائمة المخازن</span>
                     </a>
-                    <ul aria-expanded="false">
-                        <li><a href="all-courses.html">قائمة المخازن</a></li>
-                        <li><a href="add-courses.html">أضافة مخزن</a></li>
-                    </ul>
                 </li>
                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
                         <i class="las la-landmark"></i>

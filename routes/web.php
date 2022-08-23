@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductSectionController;
 use App\Http\Controllers\ShippingAreaController;
 use App\Http\Controllers\ShippingController;
+use App\Http\Controllers\StorgeController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -53,6 +54,8 @@ Route::group(['middleware' => ['auth','verified']], function() {
     Route::resource('supplier', SupplierController::class);
     // customer Routes
     Route::resource('customer', CustomerController::class);
+    // storage Routes
+    Route::resource('store', StorgeController::class);
 });
 Route::get('/{page}', [AdminController::class,'index']);
 
