@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    قائمة الاقسام
+    قائمة الخزائن
 @endsection
 @section('css')
     <!-- STYLESHEETS -->
@@ -11,14 +11,13 @@
     <div class="row page-titles mx-0">
         <div class="col-sm-6 p-md-0">
             <div class="welcome-text">
-                <h4>قائمة الاقسام</h4>
+                <h4>قائمة الخزائن</h4>
             </div>
         </div>
         <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/' . $page='dashboard') }}">لوحة التحكم</a></li>
-                <li class="breadcrumb-item active"><a href="javascript:void(0);"> الاقسام & المنتجات</a></li>
-                <li class="breadcrumb-item active"><a href="{{url('/'.$page='productSection')}}">قائمة الاقسام</a></li>
+                <li class="breadcrumb-item active"><a href="{{url('/'.$page='productSection')}}">قائمة الخزائن</a></li>
             </ol>
         </div>
     </div>
@@ -44,8 +43,8 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">قائمة الاقسام</h4>
-                    <button  class="btn btn-primary" data-toggle="modal" data-target=".product-section"><i class="las la-plus"></i> أضافة قسم</button>
+                    <h4 class="card-title">قائمة الخزائن</h4>
+                    <button  class="btn btn-primary" data-toggle="modal" data-target=".product-section"><i class="las la-plus"></i> أضافة خزينة</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -53,7 +52,9 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>اسم القسم</th>
+                                <th>اسم الخزينة</th>
+                                <th>العنوان</th>
+                                <th>رصيد البداية</th>
                                 <th>ملاحظات</th>
                                 <th>أنشا بواسطة</th>
                                 <th>تاريخ الانشاء</th>
@@ -63,32 +64,34 @@
                             </thead>
                             <tbody>
                             <?php $i=0;?>
-                            @foreach($ProductSection as $section)
+                            @foreach($treasury as $treas)
                                 <?php $i++?>
                                 <tr>
                                     <td><strong>{{$i}}</strong></td>
-                                    <td>{{$section->name}}</td>
+                                    <td>{{$treas->name}}</td>
+                                    <td>{{$treas->address}}</td>
+                                    <td>{{number_format($treas->start_balance,2)}}</td>
                                     <td>
 
-                                        @if(empty($section->description))
+                                        @if(empty($treas->description))
                                             <span class="text-primary">لا يوجد ملاحظات لعرضها</span>
                                         @else
-                                            {{$section->description}}
+                                            {{$treas->description}}
                                         @endif
                                     </td>
-                                    <td>{{$section->user->name}}</td>
-                                    <td>{{$section->created_at->todatestring() }}</td>
+                                    <td>{{$treas->user->name}}</td>
+                                    <td>{{$treas->created_at->todatestring() }}</td>
                                     <td>
-                                        @if(empty($section->updated_at))
+                                        @if(empty($treas->updated_at))
                                             <span class="text-primary">لم يتم التعديل ع هذا القسم</span>
                                         @else
-                                            {{$section->updated_at->todatestring() }}
+                                            {{$treas->updated_at->todatestring() }}
                                         @endif
 
                                     </td>
                                     <td>
-                                        <button  class="btn btn-sm btn-primary" data-toggle="modal" data-target=".product-section-edit"  data-id="{{ $section->id }}" data-section_name="{{ $section->name }}" data-description="{{ $section->description}}" ><i class="la la-pencil"></i></button>
-                                        <button  class="btn btn-sm btn-danger" data-toggle="modal" data-target=".SectionDelete" data-id="{{ $section->id }}"><i class="la la-trash-o"></i></button>
+                                        <button  class="btn btn-sm btn-primary" data-toggle="modal" data-target=".product-section-edit"  data-id="{{ $treas->id }}" data-section_name="{{ $treas->name }}" data-address="{{ $treas->address }}" data-start_balance="{{ $treas->start_balance }}" data-description="{{ $treas->description}}" ><i class="la la-pencil"></i></button>
+                                        <button  class="btn btn-sm btn-danger" data-toggle="modal" data-target=".SectionDelete" data-id="{{ $treas->id }}"><i class="la la-trash-o"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -108,12 +111,20 @@
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>
-                <form action="{{route('productSection.store')}}" method="post">
+                <form action="{{route('treasury.store')}}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>أسم القسم</label>
+                            <label>أسم الخزينة</label>
                             <input type="text" class="form-control input-default" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>عنوان الخزينة</label>
+                            <input type="text" class="form-control input-default" name="address" required>
+                        </div>
+                        <div class="form-group">
+                            <label>رصيد البداية</label>
+                            <input type="number" class="form-control input-default" name="start_balance" required>
                         </div>
                         <div class="form-group">
                             <label>ملاحظات</label>
@@ -138,15 +149,23 @@
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>
-                <form action="{{route('productSection.update','test')}}" method='post'>
+                <form action="{{route('treasury.update','test')}}" method='post'>
                     {{ method_field('patch') }}
                     {{ csrf_field() }}
                     <div class="modal-body">
 
                         <div class="form-group">
-                            <label>أسم القسم</label>
+                            <label>أسم الخزينة</label>
                             <input type="hidden" id="id" name="id">
                             <input type="text" class="form-control input-default" name="name" id="section_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>عنوان الخزينة</label>
+                            <input type="text" class="form-control input-default" id="address" name="address" required>
+                        </div>
+                        <div class="form-group">
+                            <label>رصيد البداية</label>
+                            <input type="number" class="form-control input-default" id="start_balance"  name="start_balance" required>
                         </div>
                         <div class="form-group">
                             <label>ملاحظات</label>
@@ -156,7 +175,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('Close')}}</button>
-                        <button type="submit" class="btn btn-primary">{{__('Save')}}</button>
+                        <button type="submit" class="btn btn-primary">{{__('Update')}}</button>
                     </div>
                 </form>
             </div>
@@ -168,18 +187,18 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">حذف القسم</h5>
+                    <h5 class="modal-title">حذف الخزنة</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('productSection.destroy','test') }}" method="post">
+                <form action="{{ route('treasury.destroy','test') }}" method="post">
                     {{ method_field('Delete') }}
                     @csrf
                     <input type="hidden" name="id" id="DeleteId" value="">
                     <div class="modal-body">
 
-                        <p>هل تريد حذف القسم نهائيا؟ </p>
-                        <p class="text-danger">ملحوظة : اذا كان هذا القسم مرتبط بعلاقات اخري لن يتم حذفه. </p>
+                        <p>هل تريد حذف الخزنة نهائيا؟ </p>
+                        <p class="text-danger">ملحوظة : اذا كان هذا الخزنة مرتبط بعلاقات اخري لن يتم حذفه. </p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">الغاء</button>
@@ -199,10 +218,14 @@
             var button = $(event.relatedTarget)
             var id = button.data('id')
             var section_name = button.data('section_name')
+            var address = button.data('address')
+            var start_balance = button.data('start_balance')
             var description = button.data('description')
             var modal = $(this)
             modal.find('#id').val(id);
             modal.find('#section_name').val(section_name);
+            modal.find('#address').val(address);
+            modal.find('#start_balance').val(start_balance);
             modal.find('#description').val(description);
         })
     </script>
