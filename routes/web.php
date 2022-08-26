@@ -1,12 +1,16 @@
 <?php
 
+use App\Http\Controllers\ColorsController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductSectionController;
 use App\Http\Controllers\ShippingAreaController;
 use App\Http\Controllers\ShippingController;
+use App\Http\Controllers\SizesController;
 use App\Http\Controllers\StorgeController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TreasuryController;
+use App\Http\Controllers\UnitsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
@@ -46,6 +50,12 @@ Route::group(['middleware' => ['auth','verified']], function() {
     Route::resource('productSection', ProductSectionController::class);
     // Product Routes
     Route::resource('product', ProductController::class);
+    // Sizes Routes
+    Route::resource('sizes', SizesController::class);
+    // Colors Routes
+    Route::resource('colors', ColorsController::class);
+    // units Routes
+    Route::resource('units', UnitsController::class);
     // Shipping area Routes
     Route::resource('shippingArea', ShippingAreaController::class);
     // Shipping Routes
@@ -56,6 +66,8 @@ Route::group(['middleware' => ['auth','verified']], function() {
     Route::resource('customer', CustomerController::class);
     // storage Routes
     Route::resource('store', StorgeController::class);
+    // treasury Routes
+    Route::resource('treasury', TreasuryController::class);
 });
 Route::get('/{page}', [AdminController::class,'index']);
 

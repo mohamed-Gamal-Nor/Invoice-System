@@ -87,6 +87,16 @@
                     </ul>
                 </li>
                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="las la-palette"></i>
+                        <span class="nav-text">جدول المقاسات & الالوان</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{url('/'.$page='sizes')}}">قائمة المقاسات</a></li>
+                        <li><a href="{{url('/'.$page='colors')}}">قائمة الالوان</a></li>
+                        <li><a href="{{url('/'.$page='units')}}">وحدات القياس</a></li>
+                    </ul>
+                </li>
+                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
                         <i class="las la-truck"></i>
                         <span class="nav-text">الشحن</span>
                     </a>
@@ -116,18 +126,13 @@
                 </li>
                 <li><a class="ai-icon" href="{{ url('/' . $page='store') }}" aria-expanded="false">
                         <i class="las la-campground"></i>
-
                         <span class="nav-text">قائمة المخازن</span>
                     </a>
                 </li>
-                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                <li><a class="ai-icon" href="{{ url('/' . $page='treasury') }}" aria-expanded="false">
                         <i class="las la-landmark"></i>
-                        <span class="nav-text">الخزينة</span>
+                        <span class="nav-text">قائمة الخزائن</span>
                     </a>
-                    <ul aria-expanded="false">
-                        <li><a href="all-courses.html">قائمة الخزائن</a></li>
-                        <li><a href="add-courses.html">أضافة خزينة</a></li>
-                    </ul>
                 </li>
                 <li class="nav-label">أضافات أخري</li>
                 <li><a class="ai-icon" aria-expanded="false">
