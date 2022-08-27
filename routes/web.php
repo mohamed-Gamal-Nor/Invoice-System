@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ColorsController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductSectionController;
 use App\Http\Controllers\ShippingAreaController;
@@ -68,6 +69,8 @@ Route::group(['middleware' => ['auth','verified']], function() {
     Route::resource('store', StorgeController::class);
     // treasury Routes
     Route::resource('treasury', TreasuryController::class);
+    // treasury Routes
+    Route::resource('invoices', InvoicesController::class);
 });
 Route::get('/{page}', [AdminController::class,'index']);
 

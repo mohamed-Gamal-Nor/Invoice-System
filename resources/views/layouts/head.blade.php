@@ -1,5 +1,5 @@
     <!-- PAGE TITLE HERE -->
-    <title>@yield('title') / {{ env('APP_NAME')}}</title>
+    <title>{{ env('APP_NAME')}} \ @yield('title')</title>
     <!-- STYLESHEETS -->
     <link rel="stylesheet" href="{{asset('assets/vendor/jqvmap/css/jqvmap.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendor/chartist/css/chartist.min.css')}}">

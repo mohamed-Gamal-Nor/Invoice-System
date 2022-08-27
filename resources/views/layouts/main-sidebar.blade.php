@@ -28,8 +28,8 @@
                         <span class="nav-text">حساب الموردين</span>
                     </a>
                     <ul aria-expanded="false">
-                        <li><a href="about-courses.html">قائمة الفواتير</a></li>
-                        <li><a href="all-courses.html">أضافة فاتورة لمورد</a></li>
+                        <li><a href="{{url('/'.$page='invoices')}}">قائمة فواتير المشتريات</a></li>
+                        <li><a href="all-courses.html">قائمة فواتير المرتجع</a></li>
                         <li><a href="add-courses.html">أضافة سداد لمورد</a></li>
                         <li><a href="edit-courses.html">كشف حساب مورد</a></li>
 
