@@ -172,6 +172,33 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
+                                    <label class="form-label">وحدة القياس</label>
+                                    <select class="form-control " name="unit" required>
+                                        <option >وحدة القياس</option>
+                                        @foreach($unit as $un)
+                                            <option value="{{$un->id}}"
+                                                    @if($un->id == $product->unit)
+                                                    selected
+                                                @endif
+                                            >{{$un->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('unit')
+                                    <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label">الرصيد الافتتاحي</label>
+                                    <input type="number" min="0"  class="form-control" name="start_balance" required value="{{$product->start_balance}}">
+                                    @error('start_balance')
+                                    <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="form-group">
                                     <label class="form-label">ملاحظات</label>
                                     <textarea class="form-control" rows="4" name="description">{{$product->description}}</textarea>
                                     @error('description')

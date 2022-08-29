@@ -3,8 +3,6 @@
     فواتير المشتريات
 @endsection
 @section('css')
-    <!-- STYLESHEETS -->
-    <link rel="stylesheet" href="{{asset('assets/vendor/datatables/css/jquery.dataTables.min.css')}}">
 @endsection
 
 @section('content')
@@ -25,17 +23,4 @@
     <livewire:invoices />
 @endsection
 @section('script')
-    <script type="text/javascript" src="{{ URL::asset('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
-    <script type="text/javascript" src="{{ URL::asset('assets/js/plugins-init/datatables.init.js') }}"></script>
-    <script>
-        document.addEventListener("livewire:load", function(event) {
-            window.livewire.hook('beforeDomUpdate', () => {
-                // Add your custom JavaScript here.
-            });
-
-            window.livewire.hook('afterDomUpdate', () => {
-                // Add your custom JavaScript here.
-            });
-        });
-    </script>
 @endsection

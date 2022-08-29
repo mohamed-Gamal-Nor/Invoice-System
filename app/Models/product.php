@@ -15,4 +15,7 @@ class product extends Model
     public function user(){
         return $this->belongsTo('App\Models\User','created_by');
     }
+    public function units(){
+        return $this->belongsTo('App\Models\units','unit');
+    }
 }

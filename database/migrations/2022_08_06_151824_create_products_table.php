@@ -13,10 +13,17 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('product_name')->unique();
             $table->string('product_number',999)->nullable();
+            $table->integer('start_balance',)->nullable();
             $table->string('purchasing_price',999);
             $table->string('selling_price',999);
             $table->string('product_image',999)->nullable();
             $table->text('description',999)->nullable();
+            $table->unsignedBigInteger('unit');
+            $table->foreign('unit')
+                ->references('id')
+                ->on('units')
+                ->onDelete('restrict')
+                ->onUpdate('CASCADE');
             $table->unsignedInteger('section');
             $table->foreign('section')
                 ->references('id')

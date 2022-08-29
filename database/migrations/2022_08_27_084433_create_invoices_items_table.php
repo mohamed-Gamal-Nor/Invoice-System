@@ -45,12 +45,6 @@ class CreateInvoicesItemsTable extends Migration
                 ->on('colors')
                 ->onDelete('restrict')
                 ->onUpdate('CASCADE');
-            $table->unsignedBigInteger('unit');
-            $table->foreign('unit')
-                ->references('id')
-                ->on('units')
-                ->onDelete('restrict')
-                ->onUpdate('CASCADE');
             $table->timestamps();
         });
     }

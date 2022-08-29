@@ -15,7 +15,7 @@ class CreateProductSectionsTable extends Migration
     {
         Schema::create('product_sections', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name',999)->unique();
+            $table->string('name')->unique();
             $table->text('description')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')

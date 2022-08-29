@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\product;
+use App\Models\units;
 use App\Models\ProductSection;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -28,8 +30,9 @@ class ProductController extends Controller
 
     public function create()
     {
+        $unit = units::select('id','name')->get();
         $productSection = ProductSection::select('id','name')->get();
-        return view('Product.create',compact('productSection'));
+        return view('Product.create',compact('productSection',"unit"));
     }
 
 
@@ -38,9 +41,11 @@ class ProductController extends Controller
         $this->validate($request, [
             'product_name' => 'required|unique:products,product_name|string|min:3|max:100',
             'product_number' => 'nullable|string|min:3|max:100',
+            "start_balance"=>'nullable|numeric|min:0',
             'purchasing_price' => 'required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
             "selling_price" => "required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/",
             'section' => 'required|numeric|exists:product_sections,id',
+            'unit' => 'required|numeric|exists:units,id',
             "description" => "nullable|string|max:255",
             "product_image" => "nullable|mimes:jpg,jpeg,png|max:5000"
         ],[
@@ -59,6 +64,9 @@ class ProductController extends Controller
             'section.required' => 'يجب اختيار القسم الخاص بالمنتج',
             'section.numeric' => 'هذا القسم غير صحيح',
             'section.exists' => 'هذا القسم غير مدرج بالنظام',
+            'unit.required' => 'يجب اختيار وحدة القياس الخاص بالمنتج',
+            'unit.numeric' => 'هذا وحدة القياس غير صحيح',
+            'unit.exists' => 'هذا وحدة القياس غير مدرج بالنظام',
             'description.string' => 'الملاحظات غير صحيح',
             'description.max' => 'الملاحظات لاي تزيد عن 255 حرف',
             'product_image.mimes' => 'برجاء اختيار صورة صحيحة',
@@ -67,10 +75,12 @@ class ProductController extends Controller
         try {
             $product= new product();
             $product->product_name = $request->product_name;
+            $product->start_balance = $request->start_balance;
             $product->product_number = $request->product_number;
             $product->purchasing_price = $request->purchasing_price;
             $product->selling_price = $request->selling_price;
             $product->section = $request->section;
+            $product->unit = $request->unit;
             $product->description = $request->description;
             $product->created_by = auth()->id();
             $product->save();
@@ -93,17 +103,12 @@ class ProductController extends Controller
     }
 
 
-    public function show(product $product)
-    {
-
-    }
-
-
     public function edit($id)
     {
         $product = product::find($id);
         $productSection = ProductSection::select('id','name')->get();
-        return view('product.edit',compact('product','productSection'));
+        $unit = units::select('id','name')->get();
+        return view('product.edit',compact('product','productSection','unit'));
     }
 
 
@@ -112,10 +117,12 @@ class ProductController extends Controller
         $this->validate($request, [
             'product_name' => 'required|string|min:3|max:100|unique:products,product_name,'.$request->id,
             'product_number' => 'nullable|string|min:3|max:100',
+            "start_balance"=>'nullable|numeric|min:0',
             'purchasing_price' => 'required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
             "selling_price" => "required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/",
             'section' => 'required|numeric|exists:product_sections,id',
             "description" => "nullable|string|max:255",
+            'unit' => 'required|numeric|exists:units,id',
             "product_image" => "nullable|mimes:jpg,jpeg,png|max:5000"
         ],[
             'product_name.required' => 'يجب ادخال اسم المنتج',
@@ -133,6 +140,9 @@ class ProductController extends Controller
             'section.required' => 'يجب اختيار القسم الخاص بالمنتج',
             'section.numeric' => 'هذا القسم غير صحيح',
             'section.exists' => 'هذا القسم غير مدرج بالنظام',
+            'unit.required' => 'يجب اختيار وحدة القياس الخاص بالمنتج',
+            'unit.numeric' => 'هذا وحدة القياس غير صحيح',
+            'unit.exists' => 'هذا وحدة القياس غير مدرج بالنظام',
             'description.string' => 'الملاحظات غير صحيح',
             'description.max' => 'الملاحظات لاي تزيد عن 255 حرف',
             'product_image.mimes' => 'برجاء اختيار صورة صحيحة',
@@ -150,9 +160,11 @@ class ProductController extends Controller
             $product->update([
                 "product_name" => $request->product_name,
                 "product_number" => $request->product_number,
+                "start_balance" => $request->start_balance,
                 "purchasing_price" => $request->purchasing_price,
                 "selling_price" => $request->selling_price,
                 "section" => $request->section,
+                "unit" => $request->unit,
                 "product_image" => $imageUpdate,
                 "description" => $request->description,
                 "updated_at" => date("Y-m-d h:i:s"),

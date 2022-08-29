@@ -72,6 +72,16 @@
                     </ul>
                 </li>
                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="las la-palette"></i>
+                        <span class="nav-text">جدول المقاسات & الالوان</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{url('/'.$page='sizes')}}">قائمة المقاسات</a></li>
+                        <li><a href="{{url('/'.$page='colors')}}">قائمة الالوان</a></li>
+                        <li><a href="{{url('/'.$page='units')}}">وحدات القياس</a></li>
+                    </ul>
+                </li>
+                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
                         <i class="la la-tags"></i>
                         <span class="nav-text">الاقسام & المنتجات</span>
                     </a>
@@ -86,16 +96,7 @@
                         </li>
                     </ul>
                 </li>
-                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                        <i class="las la-palette"></i>
-                        <span class="nav-text">جدول المقاسات & الالوان</span>
-                    </a>
-                    <ul aria-expanded="false">
-                        <li><a href="{{url('/'.$page='sizes')}}">قائمة المقاسات</a></li>
-                        <li><a href="{{url('/'.$page='colors')}}">قائمة الالوان</a></li>
-                        <li><a href="{{url('/'.$page='units')}}">وحدات القياس</a></li>
-                    </ul>
-                </li>
+
                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
                         <i class="las la-truck"></i>
                         <span class="nav-text">الشحن</span>
