@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductSectionController;
+use App\Http\Controllers\ProductStoreController;
 use App\Http\Controllers\ShippingAreaController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\SizesController;
@@ -69,6 +70,8 @@ Route::group(['middleware' => ['auth','verified']], function() {
     Route::resource('store', StorgeController::class);
     // treasury Routes
     Route::resource('treasury', TreasuryController::class);
+    // product store Routes
+    Route::resource('productStore', ProductStoreController::class);
     // treasury Routes
     Route::resource('invoices', InvoicesController::class);
 });

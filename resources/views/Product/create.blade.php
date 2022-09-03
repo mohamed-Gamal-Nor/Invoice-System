@@ -173,15 +173,6 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    <label class="form-label">الرصيد الافتتاحي</label>
-                                    <input type="number" min="0"  class="form-control" name="start_balance" required>
-                                    @error('start_balance')
-                                    <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="form-group">
                                     <label class="form-label">ملاحظات</label>
                                     <textarea class="form-control" rows="4" name="description"></textarea>
                                     @error('description')

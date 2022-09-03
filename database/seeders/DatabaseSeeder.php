@@ -11,5 +11,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(PermissionTableSeeder::class);
         $this->call(CreateAdminUserSeeder::class);
+        $this->call(ColorSeeder::class);
+        $this->call(SizeSeeder::class);
     }
 }

@@ -92,6 +92,7 @@
                             <ul aria-expanded="false">
                                 <li><a href="{{url(('/'.$page='product'))}}">قائمة المنتجات</a></li>
                                 <li><a href="{{url('/'.$page='product/create')}}">أضافة منتج</a></li>
+                                <li><a href="{{url('/'.$page='productStore/create')}}">الارصدة الافتتاحية</a></li>
                             </ul>
                         </li>
                     </ul>

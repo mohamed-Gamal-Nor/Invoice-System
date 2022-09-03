@@ -56,7 +56,6 @@
                                     <h4>{{$product->product_name}}</h4>
                                     <p class="price">{{ number_format($product->selling_price, 2) }} EGP</p>
                                     <p>Model number: <span class="item"> {{$product->product_number}} <i class="fa fa-check-circle text-success"></i></span></p>
-                                    <p>start balance: <span class="item"> {{$product->start_balance}} <i class="fa fa-check-circle text-success"></i></span></p>
                                     <p>Purchasing price: <span class="item">{{ number_format($product->purchasing_price, 2) }} EGP <i class="fa fa-check-circle text-success"></i></span></p>
                                     <p>profit value: <span class="item">{{ number_format($product->selling_price - $product->purchasing_price, 2) }} EGP <i class="fa fa-check-circle text-success"></i></span></p>
                                     <p>Created By: <span class="item">{{ $product->user->name}} <i class="fa fa-check-circle text-success"></i></span></p>

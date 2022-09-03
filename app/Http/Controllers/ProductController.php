@@ -41,7 +41,6 @@ class ProductController extends Controller
         $this->validate($request, [
             'product_name' => 'required|unique:products,product_name|string|min:3|max:100',
             'product_number' => 'nullable|string|min:3|max:100',
-            "start_balance"=>'nullable|numeric|min:0',
             'purchasing_price' => 'required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
             "selling_price" => "required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/",
             'section' => 'required|numeric|exists:product_sections,id',
@@ -75,7 +74,6 @@ class ProductController extends Controller
         try {
             $product= new product();
             $product->product_name = $request->product_name;
-            $product->start_balance = $request->start_balance;
             $product->product_number = $request->product_number;
             $product->purchasing_price = $request->purchasing_price;
             $product->selling_price = $request->selling_price;
@@ -117,7 +115,6 @@ class ProductController extends Controller
         $this->validate($request, [
             'product_name' => 'required|string|min:3|max:100|unique:products,product_name,'.$request->id,
             'product_number' => 'nullable|string|min:3|max:100',
-            "start_balance"=>'nullable|numeric|min:0',
             'purchasing_price' => 'required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/',
             "selling_price" => "required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/",
             'section' => 'required|numeric|exists:product_sections,id',
@@ -160,7 +157,6 @@ class ProductController extends Controller
             $product->update([
                 "product_name" => $request->product_name,
                 "product_number" => $request->product_number,
-                "start_balance" => $request->start_balance,
                 "purchasing_price" => $request->purchasing_price,
                 "selling_price" => $request->selling_price,
                 "section" => $request->section,
