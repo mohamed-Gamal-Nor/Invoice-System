@@ -14,7 +14,8 @@ class ProductStoreController extends Controller
 
     public function index()
     {
-        //
+        $StartBalance = product_store::where('status','=',0)->get();
+        return view('productStore.index',compact('StartBalance'));
     }
 
 
@@ -30,6 +31,9 @@ class ProductStoreController extends Controller
 
     public function store(Request $request)
     {
+
+
+
         $this->validate($request, [
             'product' => 'required|exists:products,id',
             'store' => 'required|exists:storges,id',
@@ -68,20 +72,28 @@ class ProductStoreController extends Controller
                         "size"=>$request->size[$siz],
                         'color'=>$request->color[$siz],
                         'store'=>$request->store,
-                        'start_balance'=>$request->balance[$siz],
-                        'end_balance'=>$request->balance[$siz],
+                        'qty'=>$request->balance[$siz],
+                        'status'=>0,
                         "created_at" => date("Y-m-d h:i:s"),
                     ]);
                 }else{
-                    array_push($errorBox,[$request->size[$siz],$request->color[$siz],$request->balance[$siz]]);
+                    $errorBox[] =[
+                        'size'=>$request->size[$siz],
+                        'color'=>$request->color[$siz],
+                        'balance'=>$request->balance[$siz]
+                    ];
                 }
             }
             if (empty($errorBox)){
                 toastr()->success(trans('تم أضافة الارصدة بنجاح'));
                 return redirect()->route('productStore.create');
+
             }else{
+                $lastArry=[$errorBox];
                 toastr()->warning(trans('تم حفظ بعض الارصدة التي كانت غير موجودة والارصدة التي تكررت لم تحفظ'));
-                return redirect()->to('/productStore/create')->with('data', $errorBox);
+                return redirect()->to('/productStore/create')->with('data', $lastArry);
+
+
             }
 
         }catch (\Exception $e) {
@@ -92,13 +104,6 @@ class ProductStoreController extends Controller
 
 
     }
-
-
-    public function show(product_store $product_store)
-    {
-        //
-    }
-
 
     public function edit(product_store $product_store)
     {
@@ -111,8 +116,32 @@ class ProductStoreController extends Controller
         //
     }
 
-    public function destroy(product_store $product_store)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            $stockIn = product_store::where('product','=',$request->product)
+                ->where('size','=',$request->size)
+                ->where('color','=',$request->color)
+                ->where('store','=',$request->store)
+                ->where('status','=',1)
+                ->sum('qty');
+            $stockOut = product_store::where('product','=',$request->product)
+                ->where('size','=',$request->size)
+                ->where('color','=',$request->color)
+                ->where('store','=',$request->store)
+                ->where('status','=',2)
+                ->sum('qty');
+            if ($stockIn >= $stockOut){
+                $product_store = product_store::findOrFail($request->id)->delete();
+                toastr()->success(trans('تم حذف الرصيد بنجاح'));
+                return redirect()->route('productStore.index');
+            }else{
+                toastr()->warning(trans('لم يتم حذف الرصيد لان اجمالي الرصيد للمنتج غير كافي'));
+                return redirect()->route('productStore.index');
+            }
+        }catch (\Exception $e) {
+            toastr()->error(trans('يوجد مشكلة بالنظام الرجاء محاولة مرة اخري او الاتصال بالمهندس'));
+            return redirect()->route('productSection.index');
+        };
     }
 }

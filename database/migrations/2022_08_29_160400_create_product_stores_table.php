@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateProductStoresTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('product_stores', function (Blueprint $table) {
@@ -39,19 +34,12 @@ class CreateProductStoresTable extends Migration
                 ->on('storges')
                 ->onDelete('restrict')
                 ->onUpdate('CASCADE');
-            $table->integer("start_balance");
-            $table->integer("entry_quantity")->nullable();
-            $table->integer("out_quantity")->nullable();;
-            $table->integer("end_balance");
+            $table->integer("qty");
+            $table->integer("status");
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('product_stores');

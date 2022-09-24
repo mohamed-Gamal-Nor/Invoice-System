@@ -92,12 +92,19 @@
                             <ul aria-expanded="false">
                                 <li><a href="{{url(('/'.$page='product'))}}">قائمة المنتجات</a></li>
                                 <li><a href="{{url('/'.$page='product/create')}}">أضافة منتج</a></li>
-                                <li><a href="{{url('/'.$page='productStore/create')}}">الارصدة الافتتاحية</a></li>
                             </ul>
                         </li>
                     </ul>
                 </li>
-
+                <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="la la-tags"></i>
+                        <span class="nav-text">الارصدة الافتتاحية</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{url('/'.$page='productStore')}}">قائمة الارصدة الافتتاحية</a></li>
+                        <li><a href="{{url('/'.$page='productStore/create')}}">اضافة ارصدة الافتتاحية</a></li>
+                    </ul>
+                </li>
                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
                         <i class="las la-truck"></i>
                         <span class="nav-text">الشحن</span>

@@ -16,49 +16,19 @@
         <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/' . $page='dashboard') }}">لوحة التحكم</a></li>
-                <li class="breadcrumb-item active"><a href="javascript:void(0);">الاقسام والمنتجات</a></li>
-                <li class="breadcrumb-item active"><a href="{{url('/'.$page='product')}}">المنتجات</a></li>
-                <li class="breadcrumb-item active"><a href="{{url('/'.$page='productStore')}}">أضافة الارصدة الافتتاحية</a></li>
+                <li class="breadcrumb-item active"><a href="{{url('/'.$page='productStore')}}">الارصدة الافتتاحية</a></li>
+                <li class="breadcrumb-item active"><a href="{{url('/'.$page='productStore/create')}}">أضافة الارصدة الافتتاحية</a></li>
             </ol>
         </div>
     </div>
-    @if ($errors->any())
-        <div class="card">
-            <div class="card-body">
-                <div class="alert alert-light alert-dismissible alert-alt fade show">
-                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
-                    </button>
-                    @foreach ($errors->all() as $error)
-                        <div><strong>Error!</strong> {{ $error }}</div>
-
-                    @endforeach
-
-                </div>
-            </div>
-        </div>
-    @endif
-    @if(!empty(session()->get('data')))
-        <div class="card">
-            <div class="card-body">
-                <div class="alert alert-light alert-dismissible alert-alt fade show">
-                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
-                    </button>
-                    @foreach(session()->get('data') as $data)
-                        @foreach($data as $dt)
-                            <div><strong>Error!</strong> {{ $dt }}</div>
-                        @endforeach
-                    @endforeach
-
-                </div>
-            </div>
-        </div>
-    @endif
     <div class="row">
         <div class="col-xl-12 col-xxl-12 col-sm-12">
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">أضافة الارصدة الافتتاحية</h5>
-                    <h5 class="card-title font-weight-bold text-danger">ملحوظة : هذة الارصدة لا يمكن تعديلها نهائيا </h5>
+                    @if(!empty(session()->get('data')))
+                        <h5 class="card-title text-danger">يوجد اصناف تم ادخالها من قبل</h5>
+                    @endif
                 </div>
                 <div class="card-body">
                     <form action="{{ route('productStore.store') }}" enctype="multipart/form-data" method="POST">
@@ -103,29 +73,60 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>
-                                            <select class="form-control form-control-sm" name="size[]" required>
-                                                <option>المقاس</option>
-                                                @foreach($size as $si)
-                                                    <option value="{{$si->id}}">{{$si->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="form-control form-control-sm" name="color[]" required>
-                                                <option>اللون</option>
-                                                @foreach($colors as $color)
-                                                    <option value="{{$color->id}}">{{$color->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control" name="balance[]" required min="0">
-                                        </td>
-                                        <td class="text-center">
-                                        </td>
-                                    </tr>
+                                    @if(!empty(session()->get('data')))
+                                        @foreach(session()->get('data') as $err)
+                                            @foreach($err as $key=>$value)
+                                                <tr class="bg-warning">
+                                                    <td >
+                                                        <select class="form-control form-control-sm" name="size[]" required>
+                                                            <option>المقاس</option>
+                                                            @foreach($size as $si)
+                                                                <option value="{{$si->id}}" @if($value['size'] == $si->id) selected @endif>{{$si->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-control form-control-sm" name="color[]" required>
+                                                            <option>اللون</option>
+                                                            @foreach($colors as $color)
+                                                                <option value="{{$color->id}}" @if($value['color'] == $color->id) selected @endif>{{$color->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-control" name="balance[]" required min="0" value="{{ $value['balance'] }}">
+                                                    </td>
+                                                    <td class="text-center">
+                                                       <a class="btn btn-danger remove">{{__('Delete')}}</a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td>
+                                                <select class="form-control form-control-sm" name="size[]" required>
+                                                    <option>المقاس</option>
+                                                    @foreach($size as $si)
+                                                        <option value="{{$si->id}}">{{$si->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select class="form-control form-control-sm" name="color[]" required>
+                                                    <option>اللون</option>
+                                                    @foreach($colors as $color)
+                                                        <option value="{{$color->id}}">{{$color->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" name="balance[]" required min="0">
+                                            </td>
+                                            <td class="text-center">
+                                            </td>
+                                        </tr>
+                                    @endif
                                     </tbody>
                                     <tfoot>
                                     <td class="text-center" colspan="4">
@@ -137,7 +138,7 @@
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12">
                                 <button type="submit" class="btn btn-primary">{{__('Save')}}</button>
-                                <a href="{{url('/'.$page='shipping')}}" class="btn btn-light">{{__('Cancel')}}</a>
+                                <a href="{{url('/'.$page='productStore')}}" class="btn btn-light">{{__('Cancel')}}</a>
                             </div>
                         </div>
                     </form>

@@ -12,4 +12,7 @@ class units extends Model
     public function user(){
         return $this->belongsTo('App\Models\User','created_by');
     }
+    public function product(){
+        return $this->belongsTo('App\Models\product','id');
+    }
 }
