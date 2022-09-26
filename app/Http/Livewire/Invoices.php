@@ -23,11 +23,29 @@ class Invoices extends Component
     // var for search in list and step
     public $supplierId=null,$storageId=null,$amount=null,$invoiceNumber=null,$fromDate=null,$toDate=null;
     // var for add invoice public variable
-    public $supplierIdCreate=1,$storageIdCreate=1,$item_count=10;
+    public $supplierIdCreate=1,$storageIdCreate=1,$item_count=2;
     // var for array items invoice
-    public $productId=[],$productColor=[],$productSize=[],$quantity=[],$price=[],$discVat=[],$rateVat=[];
+    public $productId=[],$productColor=[],$productSize=[],$quantity=[],$price=[],$discVat=[],$rateVat=[],$total=[],$note=null,$disVatInvoice=0,$RateVatInvoice=0;
+    // var for sum number
+    public $sumQuantity=0,$sumTotal=0;
     public function render()
     {
+        for ($i=1; $this->item_count>=$i;$i++ ){
+            if (empty($this->discVat[$i])){
+                $this->discVat[$i] = 0;
+            }
+            if (empty($this->rateVat[$i])){
+                $this->rateVat[$i] = 0;
+            }
+            if (!empty($this->quantity[$i]) and !empty($this->price[$i])){
+                $itemTotal = $this->quantity[$i] * $this->price[$i];
+                $TotalDisc = $itemTotal * $this->discVat[$i] /100;
+                $TotalRate = $itemTotal * $this->rateVat[$i] /100;
+                $this->total[$i] = $itemTotal + $TotalRate - $TotalDisc;
+            }
+        }
+        $this->sumQuantity = array_sum($this->quantity);
+        $this->sumTotal = array_sum($this->total);
         $invoicesQuery = invoicesModel::where('id','like','%'.$this->invoiceNumber.'%')
             ->where('supplier_id','like','%'.$this->supplierId.'%')
             ->where('storage_id','like','%'.$this->storageId.'%')
@@ -53,6 +71,7 @@ class Invoices extends Component
     }
     public function mount()
     {
+
     }
     public function invoiceListForm(){
         $this->invoiceCreate = false;
@@ -78,9 +97,8 @@ class Invoices extends Component
         'price.*' => "required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/|min:0.1",
         'discVat.*' => "nullable|regex:/^[0-9]+(\.[0-9][0-9]?)?$/|min:0|max:100",
         'rateVat.*' => "nullable|regex:/^[0-9]+(\.[0-9][0-9]?)?$/|min:0|max:100",
-        /*
-        'total' => "required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/",
-        */
+        'disVatInvoice' => "nullable|regex:/^[0-9]+(\.[0-9][0-9]?)?$/|min:0|max:100",
+        'RateVatInvoice' => "nullable|regex:/^[0-9]+(\.[0-9][0-9]?)?$/|min:0|max:100",
     ];
     protected $messages = [
         'supplierIdCreate.required' => "يجب اختيار المورد",
@@ -102,12 +120,14 @@ class Invoices extends Component
         'productColor.*.exists' => "هذا اللون غير مدرج بالنظام",
         'productSize.*.required' => "يجب اختيار المقاس",
         'productSize.*.exists' => "هذا المقاس غير مدرج بالنظام",
-        'discVat.regex' => "نسبة الخصم يجب ان تكون رقما صحيحا او كسر",
-        'discVat.min' => "نسبة الخصم يجب ان لا تقل عن 0",
-        'rateVat.regex' => "نسبة الضريبة يجب ان تكون رقما صحيحا او كسر",
-        'rateVat.min' => "نسبة الضريبة يجب ان لا تقل عن 0",
-        'total.required' => "يجب ان يكون هناك صافي الاجمالي",
-        'total.regex' => "صافي الاجمالي يجب ان يكون رقما ",
+        'discVat.*.regex' => "نسبة الخصم يجب ان تكون رقما صحيحا او كسر",
+        'discVat.*.min' => "نسبة الخصم يجب ان لا تقل عن 0",
+        'rateVat.*.regex' => "نسبة الضريبة يجب ان تكون رقما صحيحا او كسر",
+        'rateVat.*.min' => "نسبة الضريبة يجب ان لا تقل عن 0",
+        'disVatInvoice.*.regex' => "نسبة الخصم يجب ان تكون رقما صحيحا او كسر",
+        'disVatInvoice.*.min' => "نسبة الخصم يجب ان لا تقل عن 0",
+        'RateVatInvoice.*.regex' => "نسبة الضريبة يجب ان تكون رقما صحيحا او كسر",
+        'RateVatInvoice.*.min' => "نسبة الضريبة يجب ان لا تقل عن 0",
     ];
 
     public function setp1(){
@@ -122,7 +142,8 @@ class Invoices extends Component
         $this->current_step = 2;
     }
     public function setp3(){
-        for ($i=1; $this->item_count>$i;$i++ ){
+        $checkArray=[];
+        for ($i=1; $this->item_count>=$i;$i++ ){
             $this->validate([
                 'productId.'.$i=>"required|exists:products,id",
                 'productColor.'.$i => "required|exists:colors,id",
@@ -131,8 +152,59 @@ class Invoices extends Component
                 'price.'.$i => "required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/|min:0.1",
                 'discVat.'.$i => "nullable|regex:/^[0-9]+(\.[0-9][0-9]?)?$/|min:0|max:100",
                 'rateVat.'.$i => "nullable|regex:/^[0-9]+(\.[0-9][0-9]?)?$/|min:0|max:100",
+                'total.'.$i => "required|regex:/^[0-9]+(\.[0-9][0-9]?)?$/",
+                'disVatInvoice' => "nullable|regex:/^[0-9]+(\.[0-9][0-9]?)?$/|min:0|max:100",
+                'RateVatInvoice' => "nullable|regex:/^[0-9]+(\.[0-9][0-9]?)?$/|min:0|max:100",
             ]);
+            $checkArray[$i]['productId'] = $this->productId[$i];
+            $checkArray[$i]['color'] = $this->productColor[$i];
+            $checkArray[$i]['size'] = $this->productSize[$i];
+
         }
-        $this->current_step = 3;
+        $hash = array();
+        $array_out = array();
+        foreach($checkArray as $item) {
+            $hash_key = $item['productId'].'|'.$item['color'].'|'.$item['size'];
+
+            if(!array_key_exists($hash_key, $hash)) {
+                $hash[$hash_key] = sizeof($array_out);
+                $array_out[] = array(
+                    'productId' => $item['productId'],
+                    'color' => $item['color'],
+                    'size' => $item['size'],
+                    'count' => 0,
+                );
+            }
+            $array_out[$hash[$hash_key]]['count'] += 1;
+        }
+        foreach ($array_out as $key => $value){
+            if ($array_out[$key]['count'] > 1){
+                $this->addError('ErrorDuplicated', 'يوجد أكتر من صنف تم تكراره يرجي التعديل حيث يجب ان يكون الصنف مدخل مره واحدة فقط');
+            }else{
+                $this->current_step = 3;
+            }
+        }
+
+
+
+    }
+    public function add(){
+       $this->item_count++;
+    }
+    public function deleteRow(){
+        $this->item_count--;
+    }
+    public function empty(){
+        $this->productId=[];
+        $this->productColor=[];
+        $this->productSize=[];
+        $this->quantity=[];
+        $this->price=[];
+        $this->discVat=[];
+        $this->rateVat=[];
+        $this->total=[];
+    }
+    public function back($step){
+        $this->current_step=$step;
     }
 }
