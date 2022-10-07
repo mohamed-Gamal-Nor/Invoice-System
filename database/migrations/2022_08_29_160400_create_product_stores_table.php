@@ -35,6 +35,12 @@ class CreateProductStoresTable extends Migration
                 ->onDelete('restrict')
                 ->onUpdate('CASCADE');
             $table->integer("qty");
+            // 0=> start Balance
+            // 1=> purchase from supplier
+            // 2=> Repurchase To supplier
+            // 3=> pay To Customer
+            // 4=> Repay from Customer
+            // 5=> Balance Mode
             $table->integer("status");
             $table->timestamps();
         });

@@ -8,11 +8,11 @@
             <div class="card-body">
                 <div class="multisteps-form">
                     <ol class="step-indicator ps mb-5">
-                        <li class="@if($current_step === 1 || $current_step === 2 || $current_step === 3) active @endif" wire:click="setp1()">
+                        <li class="@if($current_step === 1 || $current_step === 2 || $current_step === 3) active @endif" @if($current_step !== 3) wire:click="setp1()"@endif>
                             <div class="step"><i class="las la-file-invoice"></i></div>
                             <div class="caption hidden-xs hidden-sm pb-0"><span>بيانات فاتورة المشتريات</span></div>
                         </li>
-                        <li class="@if($current_step === 2|| $current_step === 3 ) active @endif" wire:click="setp2()">
+                        <li class="@if($current_step === 2|| $current_step === 3 ) active @endif" @if($current_step !== 3) wire:click="setp2()"@endif>
                             <div class="step"><i class="las la-cart-plus"></i></div>
                             <div class="caption hidden-xs hidden-sm pb-0"><span>أضافة الاصناف والكميات</span></div>
                         </li>
@@ -299,7 +299,7 @@
                                     <span class="text-primary">(*) ألزامي</span>
                                     <div class="button-row d-flex float-right clearfix">
                                         <button class="btn btn-danger mr-1 ml-1" wire:click="back(1)">{{__('Previous')}}</button>
-                                        <button class="btn btn-primary mr-1 ml-1" wire:click="setp3()">{{__('Next')}}</button>
+                                        <button class="btn btn-primary mr-1 ml-1" wire:click="setp3()">{{__('Save')}} و متابعة</button>
                                     </div>
                                     <div wire:loading wire:target="setp3" class="font-weight-bold font-xxl text-primary">
                                         <span> تحميل</span>
@@ -307,6 +307,102 @@
                                     </div>
                                 </div>
                             </div>
+                        @endif
+                        @if($current_step === 3)
+                            <div class="col-lg-12 " id="PrintDiv" style="direction: rtl">
+                                <div class="card mt-3">
+                                    <div class="card-header bg-gray-dark">
+                                        <h3 class="text-center m-auto text-light">فاتورة مشتريات</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mb-4">
+                                            <div class="mt-2 col-12 text-center">
+                                                <h5>رقم الفاتورة <span> : {{$invoiceData->id}}</span>  رقم الاذن <span> : {{$invoiceData->id}}</span></h5>
+                                                <h5>تاريخ الفاتورة <span> : {{$invoiceData->date}}</span></h5>
+                                                <h5>كود المورد <span> : {{$invoiceData->supplier_id }}</span></h5>
+                                                <h5>اسم المورد <span> : {{$invoiceData->supplier->name }}</span></h5>
+                                                <h5>مخزن الاضافة <span> : {{$invoiceData->storage->name }}</span></h5>
+                                                @if(!empty($invoiceData->note))
+                                                    <h5>ملاحظات <span> : {{$invoiceData->note }}</span></h5>
+                                                @endif
+
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                <tr class="text-right">
+                                                    <th >#</th>
+                                                    <th>اسم الصنف</th>
+                                                    <th>اللون</th>
+                                                    <th>المقاس</th>
+                                                    <th>الكمية</th>
+                                                    <th>السعر</th>
+                                                    <th>نسبة الخصم</th>
+                                                    <th>قيمة الخصم</th>
+                                                    <th>نسبة الضريبة</th>
+                                                    <th>قيمة الضريبة</th>
+                                                    <th>الاجمالي</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <?php $i =0?>
+                                                @foreach($invoiceData->items as $item)
+                                                    <?php $i++?>
+                                                    <tr class="text-right">
+                                                        <td>{{$i}}</td>
+                                                        <td>{{$item->productData->product_name}}</td>
+                                                        <td>{{$item->colorData->name}}</td>
+                                                        <td>{{$item->sizeData->name}}</td>
+                                                        <td>{{$item->quantity}}</td>
+                                                        <td>{{number_format($item->price,2)}} <span>ج.م</span></td>
+                                                        <td>{{number_format($item->discount_vat,2)}}%</td>
+                                                        <td>{{number_format(($item->quantity*$item->price)*$item->discount_vat/100,2)}} <span>ج.م</span></td>
+                                                        <td>{{number_format($item->rate_vat,2)}}%</td>
+                                                        <td>{{number_format(($item->quantity*$item->price)*$item->rate_vat/100,2)}} <span>ج.م</span></td>
+                                                        <td>{{number_format($item->total,2)}} <span>ج.م</span></td>
+                                                    </tr>
+                                                @endforeach
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6"> </div>
+                                            <div class="col-lg-6 col-sm-6 ml-auto">
+                                                <table class="table table-clear">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="left"><strong>الاجمالي</strong></td>
+                                                        <td class="right">{{number_format($invoiceData->sub_total,2)}} <span>ج.م</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="left"><strong>نسبة الخصم ({{number_format($invoiceData->discount_vat,2)}}%)</strong></td>
+                                                        <td class="right">{{number_format($invoiceData->sub_total *($invoiceData->discount_vat /100) ,2)}}  <span>ج.م</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="left"><strong>نسبة الضريبة ({{number_format($invoiceData->rate_vat,2)}}%)</strong></td>
+                                                        <td class="right">{{number_format($invoiceData->sub_total *($invoiceData->rate_vat /100) ,2)}}  <span>ج.م</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="left"><strong>صافي الاجمالي</strong></td>
+                                                        <td class="right">
+                                                            <strong>
+                                                                {{number_format((($invoiceData->sub_total) + ($invoiceData->sub_total *($invoiceData->rate_vat /100)) - ($invoiceData->sub_total *($invoiceData->discount_vat /100))),2)}}<span>ج.م</span>
+                                                            </strong>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="card-body text-right" style="direction: rtl">
+                                    <button wire:click="print" type="button" class="btn  btn-square btn-primary"><i class="la la-print"></i> طباعة</button>
+                                    <button type="button" class="btn  btn-square btn-secondary" wire:click="setp1()">أضافة فاتورة جديدة</button>
+                                </div>
                         @endif
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar"  dir="rtl" >
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -67,13 +67,23 @@
     <!--**********************************Content body end***********************************-->
 
     <!--**********************************Footer start***********************************-->
+
     @include('layouts.footer')
     <!--**********************************Footer end***********************************-->
 </div>
     <!--**********************************Main wrapper end***********************************-->
     <!--**********************************Scripts***********************************-->
-
     @include('layouts.footer-scripts')
     @livewireScripts
+    <script>
+        window.livewire.on('print', param => {
+            var printContents = document.getElementById("PrintDiv").innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload();
+        });
+    </script>
 </body>
 </html>

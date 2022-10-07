@@ -1,7 +1,8 @@
+
 (function($) {
 
 	var direction =  getUrlParams('dir');
-	if(direction != 'rtl')
+	if(direction !== 'rtl')
 	{direction = 'rtl'; }
 
 	var dlabSettingsOptions = {

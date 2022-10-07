@@ -2,14 +2,17 @@
 
 namespace App\Http\Livewire;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
-use App\Models\invoices as invoicesModel;
 use App\Models\supplier;
 use App\Models\storge;
 use App\Models\product;
 use App\Models\colors;
 use App\Models\sizes;
 use App\Models\units;
+use App\Models\invoicesItems;
+use App\Models\product_store;
+use App\Models\invoices as invo;
 use Livewire\Component;
 
 class Invoices extends Component
@@ -17,17 +20,17 @@ class Invoices extends Component
     use WithPagination;
     //theme pagnation
     protected $paginationTheme = 'bootstrap';
-    public $current_step=2;
+    public $current_step=1;
     // var for control view
-    public $invoicesList = false,$invoiceCreate=true;
+    public $invoicesList = true,$invoiceCreate=false;
     // var for search in list and step
-    public $supplierId=null,$storageId=null,$amount=null,$invoiceNumber=null,$fromDate=null,$toDate=null;
+    public $supplierId=null,$storageId=null,$amount=null,$invoiceNumber=null,$fromDate='01-01-2022',$toDate=null;
     // var for add invoice public variable
-    public $supplierIdCreate=1,$storageIdCreate=1,$item_count=2;
+    public $supplierIdCreate=null,$storageIdCreate=null,$item_count=null,$LastId=1;
     // var for array items invoice
     public $productId=[],$productColor=[],$productSize=[],$quantity=[],$price=[],$discVat=[],$rateVat=[],$total=[],$note=null,$disVatInvoice=0,$RateVatInvoice=0;
     // var for sum number
-    public $sumQuantity=0,$sumTotal=0;
+    public $sumQuantity=0,$sumTotal=0,$checkItems=0;
     public function render()
     {
         for ($i=1; $this->item_count>=$i;$i++ ){
@@ -46,7 +49,7 @@ class Invoices extends Component
         }
         $this->sumQuantity = array_sum($this->quantity);
         $this->sumTotal = array_sum($this->total);
-        $invoicesQuery = invoicesModel::where('id','like','%'.$this->invoiceNumber.'%')
+        $invoicesQuery = invo::where('id','like','%'.$this->invoiceNumber.'%')
             ->where('supplier_id','like','%'.$this->supplierId.'%')
             ->where('storage_id','like','%'.$this->storageId.'%')
             ->where('sub_total','like','%'.$this->amount.'%')
@@ -58,6 +61,11 @@ class Invoices extends Component
         $units=units::select('id','name')->get();
         $colors=colors::select('id','name','rgb')->get();
         $sizes=sizes::select('id','name')->get();
+        if ($this->current_step === 3 and $this->invoiceCreate){
+            $invoiceData = invo::find($this->LastId);
+        }else{
+            $invoiceData = null;
+        }
         return view('livewire.invoices.invoices',[
             'invoices' => $invoicesQuery,
             'supplier' => $supplier,
@@ -66,6 +74,7 @@ class Invoices extends Component
             'units' => $units,
             'colors' => $colors,
             'sizes' => $sizes,
+            'invoiceData' => $invoiceData,
             ]);
 
     }
@@ -161,9 +170,13 @@ class Invoices extends Component
             $checkArray[$i]['size'] = $this->productSize[$i];
 
         }
+        $this->checkDoubleItem($checkArray);
+
+    }
+    public function checkDoubleItem($array){
         $hash = array();
         $array_out = array();
-        foreach($checkArray as $item) {
+        foreach($array as $item) {
             $hash_key = $item['productId'].'|'.$item['color'].'|'.$item['size'];
 
             if(!array_key_exists($hash_key, $hash)) {
@@ -179,14 +192,58 @@ class Invoices extends Component
         }
         foreach ($array_out as $key => $value){
             if ($array_out[$key]['count'] > 1){
+                $this->checkItems++;
                 $this->addError('ErrorDuplicated', 'يوجد أكتر من صنف تم تكراره يرجي التعديل حيث يجب ان يكون الصنف مدخل مره واحدة فقط');
             }else{
-                $this->current_step = 3;
+                $this->checkItems--;
+
             }
         }
-
-
-
+        if ($this->checkItems < 0){
+            $this->LastId =invo::create([
+                'date'=>date("Y-m-d"),
+                'sub_total'=>$this->sumTotal,
+                "discount_vat"=>$this->disVatInvoice,
+                'rate_vat'=> $this->RateVatInvoice,
+                'note'=> $this->note,
+                'created_by'=>auth()->id(),
+                'last_update'=>null,
+                'storage_id'=>$this->storageIdCreate,
+                'supplier_id'=>$this->supplierIdCreate,
+                'created_at'=>date("Y-m-d h:i:s"),
+                'updated_at'=>null,
+            ])->id;
+            for ($i=1; $this->item_count>=$i;$i++ ){
+                $invoiceitem = array(
+                    'date'=>date("Y-m-d"),
+                    'invoice_id'=>$this->LastId,
+                    "product"=>$this->productId[$i],
+                    "price"=>$this->price[$i],
+                    "quantity"=> $this->quantity[$i],
+                    "discount_vat"=> $this->discVat[$i],
+                    "rate_vat"=> $this->rateVat[$i],
+                    "total"=> $this->total[$i],
+                    "size"=> $this->productSize[$i],
+                    "color"=> $this->productColor[$i],
+                    "created_at"=>date("Y-m-d h:i:s"),
+                    'updated_at'=>null,
+                );
+                $invoicehistory = array(
+                    "product"=>$this->productId[$i],
+                    "qty"=> $this->quantity[$i],
+                    "size"=> $this->productSize[$i],
+                    "color"=> $this->productColor[$i],
+                    "store"=>$this->storageIdCreate,
+                    "status"=>1,
+                    "created_at"=>date("Y-m-d h:i:s"),
+                    'updated_at'=>null,
+                );
+                invoicesItems::insert($invoiceitem);
+                product_store::insert($invoicehistory);
+            }
+            $this->clearForm();
+            $this->current_step = 3;
+        }
     }
     public function add(){
        $this->item_count++;
@@ -204,7 +261,21 @@ class Invoices extends Component
         $this->rateVat=[];
         $this->total=[];
     }
+    public function clearForm(){
+        $this->empty();
+        $this->supplierIdCreate=null;
+        $this->storageIdCreate=null;
+        $this->item_count=null;
+        $this->sumQuantity=0;
+        $this->sumTotal=0;
+        $this->checkItems=0;
+
+    }
     public function back($step){
         $this->current_step=$step;
+    }
+    public function print()
+    {
+        $this->emit('print');
     }
 }

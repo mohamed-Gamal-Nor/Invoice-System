@@ -21,4 +21,7 @@ class invoices extends Model
     public function storage(){
         return $this->belongsTo('App\Models\storge','storage_id');
     }
+    public function items(){
+        return $this->hasMany('App\Models\invoicesItems','invoice_id');
+    }
 }
