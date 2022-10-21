@@ -72,8 +72,11 @@ Route::group(['middleware' => ['auth','verified']], function() {
     Route::resource('treasury', TreasuryController::class);
     // product store Routes
     Route::resource('productStore', ProductStoreController::class);
-    // treasury Routes
-    Route::resource('invoices', InvoicesController::class);
+    // invoice supplier Routes
+    Route::get('invoices', [InvoicesController::class,'index']);
+    Route::get('invoice-pdf/{id}', [InvoicesController::class,'pdf']);
+    Route::get('invoice-print/{id}', [InvoicesController::class,'print']);
+    Route::get('invoice-excel/{id}', [InvoicesController::class,'excel']);
 });
 Route::get('/{page}', [AdminController::class,'index']);
 

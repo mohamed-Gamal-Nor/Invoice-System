@@ -14,7 +14,6 @@ use App\Models\invoicesItems;
 use App\Models\product_store;
 use App\Models\invoices as invo;
 use Livewire\Component;
-
 class Invoices extends Component
 {
     use WithPagination;
@@ -228,6 +227,7 @@ class Invoices extends Component
                     "created_at"=>date("Y-m-d h:i:s"),
                     'updated_at'=>null,
                 );
+                $iditem = invoicesItems::insertGetId($invoiceitem);
                 $invoicehistory = array(
                     "product"=>$this->productId[$i],
                     "qty"=> $this->quantity[$i],
@@ -236,9 +236,9 @@ class Invoices extends Component
                     "store"=>$this->storageIdCreate,
                     "status"=>1,
                     "created_at"=>date("Y-m-d h:i:s"),
+                    'invoice_supplier_purchases'=>$iditem,
                     'updated_at'=>null,
                 );
-                invoicesItems::insert($invoiceitem);
                 product_store::insert($invoicehistory);
             }
             $this->clearForm();

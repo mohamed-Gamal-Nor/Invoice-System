@@ -74,14 +74,26 @@
                                     @if(!empty($invoice->last_update))
                                         {{$invoice->userUpdate->name}}
                                         @else
-                                        لم يتم التعديل ع هذة الفاتورة
+                                        لم يتم التعديل علي هذة الفاتورة
                                     @endif
 
                                 </td>
                                 <td>
-                                    <button  class="btn btn-sm btn-primary" ><i class="la la-pencil"></i></button>
-                                    <button  class="btn btn-sm btn-success" ><i class="la la-eye"></i></button>
-                                    <button  class="btn btn-sm btn-danger"><i class="la la-trash-o"></i></button>
+                                    <div class="dropdown text-sans-serif">
+                                        <button class="btn btn-link" type="button" id="order-dropdown-7" data-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false">
+                                            <span class="fa fa-ellipsis-h fs--1"></span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right border py-0" aria-labelledby="order-dropdown-7">
+                                            <div class="py-2">
+                                                <a class="dropdown-item" href="#"><i class="la la-pencil text-primary"></i> تعديل الفاتورة </a>
+                                                <a class="dropdown-item" href="#"><i class="la la-eye text-success"></i> عرض الفاتورة </a>
+                                                <a class="dropdown-item" href="#"><i class="la la-trash-o text-danger"></i> حذف الفاتورة </a>
+                                                <a href="{{url(('/'.$page='invoice-print/'.$invoice->id))}}" class="dropdown-item" target="_blank"><i class="la la-print text-black"></i> طباعة الفاتورة </a>
+                                                <a href="{{url(('/'.$page='invoice-pdf/'.$invoice->id))}}" class="dropdown-item"-><i class="las la-file-pdf text-danger"></i> PDF تنزل الفاتورة</a>
+                                                <a href="{{url(('/'.$page='invoice-excel/'.$invoice->id))}}" class="dropdown-item" target="_blank"><i class="las la-file-excel text-success"></i> Excel تصدير الفاتورة </a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

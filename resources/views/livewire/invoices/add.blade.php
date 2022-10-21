@@ -399,10 +399,10 @@
                                     </div>
                                 </div>
                             </div>
-                                <div class="card-body text-right" style="direction: rtl">
-                                    <button wire:click="print" type="button" class="btn  btn-square btn-primary"><i class="la la-print"></i> طباعة</button>
-                                    <button type="button" class="btn  btn-square btn-secondary" wire:click="setp1()">أضافة فاتورة جديدة</button>
-                                </div>
+                            <div class="card-body text-right" style="direction: rtl">
+                                <button wire:click="print" type="button" class="btn  btn-square btn-primary"><i class="la la-print"></i> طباعة</button>
+                                <button type="button" class="btn  btn-square btn-secondary" wire:click="setp1()">أضافة فاتورة جديدة</button>
+                            </div>
                         @endif
                     </div>
                 </div>

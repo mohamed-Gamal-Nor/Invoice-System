@@ -35,6 +35,40 @@ class CreateProductStoresTable extends Migration
                 ->onDelete('restrict')
                 ->onUpdate('CASCADE');
             $table->integer("qty");
+            // relation with ivoice items supplier purchases
+            $table->unsignedBigInteger('invoice_supplier_purchases')->nullable();
+            $table->foreign('invoice_supplier_purchases')
+                ->references('id')
+                ->on('invoices_items')
+                ->onDelete('restrict')
+                ->onUpdate('CASCADE');
+            // relation with ivoice items supplier Returned purchases
+            /*
+            $table->unsignedBigInteger('invoice_supplier_purchases_returned')->nullable();
+            $table->foreign('invoice_supplier_purchases_returned')
+                ->references('id')
+                ->on('')
+                ->onDelete('restrict')
+                ->onUpdate('CASCADE');
+            */
+            // relation with ivoice items customer purchases
+            /*
+            $table->unsignedBigInteger('invoice_customer_purchases')->nullable();
+            $table->foreign('invoice_supplier_purchases')
+                ->references('id')
+                ->on('')
+                ->onDelete('restrict')
+                ->onUpdate('CASCADE');
+            // relation with ivoice items customer Returned purchases
+            */
+            /*
+            $table->unsignedBigInteger('invoice_customer_purchases_returned')->nullable();
+            $table->foreign('invoice_supplier_purchases')
+                ->references('id')
+                ->on('')
+                ->onDelete('restrict')
+                ->onUpdate('CASCADE');
+            */
             // 0=> start Balance
             // 1=> purchase from supplier
             // 2=> Repurchase To supplier
