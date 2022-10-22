@@ -12,10 +12,10 @@ class UserController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:قائمة المستخدمين', ['only' => ['index']]);
-        $this->middleware('permission:أضافة مستخدمين', ['only' => ['create','store']]);
-        $this->middleware('permission:تعديل مستخدم', ['only' => ['edit','update']]);
-        $this->middleware('permission:حذف مستخدم', ['only' => ['destroy']]);
+        $this->middleware('', ['only' => ['']]);
+        $this->middleware('permission:Users-create', ['only' => ['create','store']]);
+        $this->middleware('permission:Users-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Users-delete', ['only' => ['destroy']]);
     }
 
     public function index(Request $request)

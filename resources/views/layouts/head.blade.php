@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/skin-2.css')}}">
     <link rel="stylesheet" href="{{asset('assets/vendor/wizard/style.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}">
     @toastr_css
     @yield('css')
 

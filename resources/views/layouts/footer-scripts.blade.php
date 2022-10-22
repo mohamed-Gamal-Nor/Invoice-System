@@ -15,6 +15,7 @@
     <!-- Svganimation scripts -->
     <script type="text/javascript" src="{{ URL::asset('assets/vendor/svganimation/vivus.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('assets/vendor/svganimation/svg.animation.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('assets/js/plugins-init/bootstrap.bundle.min.js') }}"></script>
     @toastr_js
     @toastr_render
     @yield('script')

@@ -35,7 +35,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">قائمة المستخدمين</h4>
-                            @can('أضافة مستخدمين')
+                            @can('Users-create')
                                 <a href="{{url('/'.$page='users/create')}}" class="btn btn-primary"><i class="las la-plus"></i> أضافة مستخدم</a>
                             @endcan
 
@@ -90,10 +90,10 @@
                                             </td>
                                             <td>{{$user->created_at->todatestring() }}</td>
                                             <td>
-                                                @can('تعديل مستخدم')
+                                                @can('Users-edit')
                                                     <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary"><i class="la la-pencil"></i></a>
                                                 @endcan
-                                                @can('حذف مستخدم')
+                                                @can('Users-delete')
                                                     <button type="button" data-user_id="{{ $user->id }}" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#basicModal"><i class="la la-trash-o"></i></button>
                                                 @endcan
 

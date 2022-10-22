@@ -20,31 +20,94 @@
             </ol>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="direction: rtl">
         <div class="col-md-12">
             <div class="card mg-b-20">
                 <div class="card-body">
                     <div class="card-header">
                         <h4 class="card-title">{{ $role->name }}</h4>
                         <div>
-                            @can('أضافة صلاحية')
+                            @can('Role-create')
                                 <a href="{{url('/'.$page='roles/create')}}" class="btn btn-primary"><i class="las la-plus"></i> أضافة صلاحية</a>
                             @endcan
-                            @can('أضافة صلاحية')
+                            @can('Role-edit')
                                 <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-info"><i class="las la-edit"></i> تعديل الصلاحية</a>
+                            @endcan
+                            @can('Role-show')
+                                <a href="{{ route('roles.index') }}" class="btn btn-success"><i class="las la-list"></i>قائمة الصلاحيات</a>
                             @endcan
                         </div>
                     </div>
-                    <div class="basic-list-group">
-                        <ul class="list-group">
-                            @if(!empty($rolePermissions))
-                                @foreach($rolePermissions as $v)
-                                    <li class="list-group-item">{{ $v->name }}</li>
-                                @endforeach
-                            @endif
-                        </ul>
+                    <div class="table-responsive text-center col-10 m-auto">
+                        <table class="table table-hover table-responsive-sm">
+                            <thead>
+                            <tr>
+                                <th width="5%">#</th>
+                                <th width="35%">الجدول</th>
+                                <th width="20%">اضافة</th>
+                                <th width="20%">عرض</th>
+                                <th width="20%">تعديل</th>
+                                <th width="20%">حذف</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php $i=0;?>
+                            @foreach($rolePermissions as $permission)
+                                <?php $i++?>
+                                @php
+                                    $sub_permissions = Spatie\Permission\Models\Permission::where('table',$permission->table)->get();
+                                @endphp
+                                <tr>
+                                    <th>{{$i}}</th>
+                                    <td>{{$permission->table}}</td>
+                                    @if($rolePermissions->where('name',$permission->table.'-create')->first())
+                                        <td>
+                                            @if($role->hasPermissionTo($permission->table.'-create'))
+                                                <span class="fas fa-check font-2" style="color:green;"></span>
+                                            @endif
+                                        </td>
+                                    @else
+                                        <td>
+                                        </td>
+                                    @endif
+                                    @if($sub_permissions->where('name',$permission->table.'-show')->first())
+                                        <td>
+                                            @if($role->hasPermissionTo($permission->table.'-show'))
+                                                <span class="fas fa-check font-2" style="color:green;"></span>
+                                            @endif
+                                        </td>
+                                    @else
+                                        <td>
+                                        </td>
+                                    @endif
+                                    @if($sub_permissions->where('name',$permission->table.'-edit')->first())
+                                        <td>
+                                            @if($role->hasPermissionTo($permission->table.'-edit'))
+                                                <span class="fas fa-check font-2" style="color:green;"></span>
+                                            @endif
+                                        </td>
+                                    @else
+                                        <td>
+                                        </td>
+                                    @endif
+                                    @if($sub_permissions->where('name',$permission->table.'-delete')->first())
+                                        <td>
+                                            @if($role->hasPermissionTo($permission->table.'-delete'))
+                                                <span class="fas fa-check font-2" style="color:green;"></span>
+                                            @endif
+                                        </td>
+                                    @else
+                                        <td>
+                                        </td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                        @error('permission')
+                        <span class="text-danger" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
                     </div>
-
                 </div>
             </div>
         </div>

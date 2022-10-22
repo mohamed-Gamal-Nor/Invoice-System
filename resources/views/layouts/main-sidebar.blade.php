@@ -52,28 +52,21 @@
                         <span class="nav-text">المستخدمين & الصلاحيات</span>
                     </a>
                     <ul aria-expanded="false">
-                        @can('قائمة المستخدمين')
                             <li><a href="{{url('/'.$page='users')}}">قائمة المستخدمين</a></li>
-                        @endcan
-                        @can('أضافة مستخدمين')
                                 <li><a href="{{url('/'.$page='users/create')}}">أضافة مستخدم</a></li>
-                        @endcan
 
                         <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">صلاحيات المستخدمين</a>
                             <ul aria-expanded="false">
-                                @can('قائمة الصلاحيات')
                                     <li><a href="{{url('/'.$page='roles')}}">قائمة الصلاحيات</a></li>
-                                @endcan
-                                @can('أضافة صلاحية')
+
                                     <li><a href="{{url('/'.$page='roles/create')}}">أضافة صلاحية</a></li>
-                                @endcan
                             </ul>
                         </li>
                     </ul>
                 </li>
                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
                         <i class="las la-palette"></i>
-                        <span class="nav-text">جدول المقاسات & الالوان</span>
+                        <span class="nav-text">المقاسات & الالوان</span>
                     </a>
                     <ul aria-expanded="false">
                         <li><a href="{{url('/'.$page='sizes')}}">قائمة المقاسات</a></li>

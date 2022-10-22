@@ -11,12 +11,13 @@ class RoleController extends Controller
     function __construct()
     {
 
-        $this->middleware('permission:قائمة الصلاحيات', ['only' => ['index']]);
-        $this->middleware('permission:عرض صلاحية', ['only' => ['show']]);
-        $this->middleware('permission:أضافة صلاحية', ['only' => ['create','store']]);
-        $this->middleware('permission:تعديل صلاحية', ['only' => ['edit','update']]);
-        $this->middleware('permission:حذف صلاحية', ['only' => ['destroy']]);
+        $this->middleware('permission:Role-show', ['only' => ['index']]);
+        $this->middleware('permission:Role-show', ['only' => ['show']]);
+        $this->middleware('permission:Role-create', ['only' => ['create','store']]);
+        $this->middleware('permission:Role-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Role-delete', ['only' => ['destroy']]);
     }
+
     public function index(Request $request)
     {
         $roles = Role::orderBy('id','ASC')->get();
@@ -25,8 +26,8 @@ class RoleController extends Controller
 
     public function create()
     {
-        $permission = Permission::get();
-        return view('roles.create',compact('permission'));
+        $permissions = Permission::groupBy('table')->get();
+        return view('roles.create',compact('permissions'));
     }
 
     public function store(Request $request)
@@ -56,6 +57,7 @@ class RoleController extends Controller
         $role = Role::find($id);
         $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
             ->where("role_has_permissions.role_id",$id)
+            ->groupBy('table')
             ->get();
         return view('roles.show',compact('role','rolePermissions'));
     }
@@ -63,11 +65,11 @@ class RoleController extends Controller
     public function edit($id)
     {
         $role = Role::find($id);
-        $permission = Permission::get();
+        $permissions = Permission::groupBy('table')->get();
         $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
             ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
             ->all();
-        return view('roles.edit',compact('role','permission','rolePermissions'));
+        return view('roles.edit',compact('role','permissions','rolePermissions'));
     }
 
     public function update(Request $request, $id)

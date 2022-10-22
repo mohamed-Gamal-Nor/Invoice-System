@@ -7,18 +7,20 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            'قائمة الصلاحيات',
-            'أضافة صلاحية',
-            'تعديل صلاحية',
-            'حذف صلاحية',
-            'عرض صلاحية',
-            'قائمة المستخدمين',
-            'أضافة مستخدمين',
-            'تعديل مستخدم',
-            'حذف مستخدم'
+            'Role-create'=>'Role',
+            'Role-show'=>'Role',
+            'Role-edit'=>'Role',
+            'Role-delete'=>'Role',
+            'Users-create'=>'Users',
+            'Users-show'=>'Users',
+            'Users-edit'=>'Users',
+            'Users-delete'=>'Users',
         ];
-        foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+        foreach ($permissions as $key=>$value) {
+            Permission::create([
+                'name' => $key,
+                'table'=>$value
+            ]);
         }
     }
 }

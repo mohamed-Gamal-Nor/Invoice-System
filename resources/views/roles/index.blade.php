@@ -28,9 +28,8 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">قائمة الصلاحيات</h4>
-                    @can('أضافة صلاحية')
                         <a href="{{url('/'.$page='roles/create')}}" class="btn btn-primary"><i class="las la-plus"></i> أضافة صلاحية</a>
-                    @endcan
+
 
                 </div>
                 <div class="card-body">
@@ -40,6 +39,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>اسم الصلاحية</th>
+                                <th>عدد الصلاحيات</th>
                                 <th>العمليات</th>
                             </tr>
                             </thead>
@@ -49,22 +49,18 @@
                                 <tr>
                                     <td>{{ ++$i }}</td>
                                     <td>{{ $role->name }}</td>
+                                    <td> {{$role->permissions->count()}}</td>
                                     <td>
-                                        @can('تعديل صلاحية')
                                         <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-sm btn-primary"><i class="la la-pencil"></i></a>
-                                        @endcan
-                                        @if ($role->name !== 'owner')
-                                            @can('حذف صلاحية')
-                                                {!! Form::open(['method' => 'DELETE', 'route' => ['roles.destroy',
-                                                $role->id], 'style' => 'display:inline']) !!}
-                                                    {!!Form::button('<i class="la la-trash-o"></i>', ['type' => 'submit', 'class' => 'btn btn-sm btn-danger'])!!}
-                                                {!! Form::close() !!}
-                                            @endcan
-                                        @endif
-                                        @can('عرض صلاحية')
-                                        <a href="{{ route('roles.show', $role->id) }}" class="btn btn-sm btn-success"><i class="la la-eye"></i></a>
-                                        @endcan
 
+
+                                        <a href="{{ route('roles.show', $role->id) }}" class="btn btn-sm btn-success"><i class="la la-eye"></i></a>
+                                        @if ($role->name !== 'owner')
+                                            {!! Form::open(['method' => 'DELETE', 'route' => ['roles.destroy',
+                                            $role->id], 'style' => 'display:inline']) !!}
+                                            {!!Form::button('<i class="la la-trash-o"></i>', ['type' => 'submit', 'class' => 'btn btn-sm btn-danger'])!!}
+                                            {!! Form::close() !!}
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
